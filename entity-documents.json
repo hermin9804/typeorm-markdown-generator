@@ -1,0 +1,101 @@
+[
+  {
+    "name": "Comment",
+    "docs": [
+      "Comment entity represents a comment on a post in the application.\n@namespace Post"
+    ],
+    "namespace": "entity",
+    "properties": [
+      {
+        "name": "id",
+        "docs": [
+          "Primary key for the comment."
+        ]
+      },
+      {
+        "name": "content",
+        "docs": [
+          "Content of the comment."
+        ]
+      },
+      {
+        "name": "post",
+        "docs": [
+          "Post to which the comment belongs."
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Post",
+    "docs": [
+      "Post entity represents a blog post in the application.\n@namespace Post\n@namespace User"
+    ],
+    "namespace": "entity",
+    "properties": [
+      {
+        "name": "id",
+        "docs": [
+          "Primary key for the post."
+        ]
+      },
+      {
+        "name": "title",
+        "docs": [
+          "Title of the post."
+        ]
+      },
+      {
+        "name": "content",
+        "docs": [
+          "Content of the post."
+        ]
+      },
+      {
+        "name": "user",
+        "docs": [
+          "User who created the post."
+        ]
+      },
+      {
+        "name": "comments",
+        "docs": [
+          "List of comments on the post."
+        ]
+      }
+    ]
+  },
+  {
+    "name": "User",
+    "docs": [
+      "User entity represents a user in the application.\n@namespace User"
+    ],
+    "namespace": "entity",
+    "properties": [
+      {
+        "name": "id",
+        "docs": [
+          "Primary key for the user."
+        ]
+      },
+      {
+        "name": "username",
+        "docs": [
+          "Username of the user."
+        ]
+      },
+      {
+        "name": "email",
+        "docs": [
+          "Email of the user."
+        ]
+      },
+      {
+        "name": "posts",
+        "docs": [
+          "List of posts created by the user."
+        ]
+      }
+    ]
+  }
+]

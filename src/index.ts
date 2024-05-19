@@ -1,45 +1,51 @@
+import fs from "fs";
 import "reflect-metadata";
-import { DataSource } from "typeorm";
+import { DataSource, DataSourceOptions } from "typeorm";
 import { MermaidErd } from "./mermaid-erd";
-import { extractRelations, fetchEntityMetadata } from "./entity-metadata-utils";
 import { TableFactory } from "./table-factory";
+import { EntityDocumentFactory } from "./entity-document-factory";
+import { AggregateFactory } from "./aggregate-factory";
+import { Markdown } from "./markdown";
+
+const entityPath = "src/entities/*.entity.ts";
 
 const AppDataSource = new DataSource({
   type: "sqlite",
   database: "database.sqlite",
   synchronize: true,
   logging: false,
-  entities: ["src/entities/*.entity.ts"],
+  entities: [entityPath],
 });
-
-// AppDataSource.initialize()
-//   .then(async (connection) => {
-//     const metadataBuilder = new MetadataBuilder(connection);
-//     const entityMetadata = await metadataBuilder.getEntityMetadata();
-//     const relationData = metadataBuilder.getRelations(entityMetadata);
-
-//     console.log("Entity Metadata:", entityMetadata);
-//     console.log("Relation Data:", relationData);
-//   })
-//   .catch((error) => console.log(error));
-
-// AppDataSource.initialize()
-//   .then(async (connection) => {
-//     const mermaidErd = new MermaidErd(connection);
-//     await mermaidErd.initialize();
-//     const erdDiagram = mermaidErd.render();
-
-//     console.log(erdDiagram);
-//   })
-//   .catch((error) => console.log(error));
 
 const main = async () => {
   const connection = await AppDataSource.initialize();
-  const tableFactory = new TableFactory(connection);
-  const tables = await tableFactory.getTables();
-  const mermaidErd = new MermaidErd(tables);
-  const erdDiagram = mermaidErd.render();
-  console.log(erdDiagram);
+
+  // const mermaidErd = new MermaidErd(tables);
+  // const erdDiagram = mermaidErd.render();
+
+  // const tableFactory = new TableFactory(connection);
+  // const tables = await tableFactory.getTables();
+  // console.log(tables);
+
+  // const entityDocumentFactory = new EntityDocumentFactory(entityPath);
+  // const entityDocuments = entityDocumentFactory.createEntityDocument();
+  // fs.writeFileSync(
+  //   "entity-documents.json",
+  //   JSON.stringify(entityDocuments, null, 2)
+  // );
+
+  const aggregateFactory = new AggregateFactory(entityPath, connection);
+  const aggregates = await aggregateFactory.createAggregates();
+  // fs.writeFileSync("aggregates.json", JSON.stringify(aggregates, null, 2));
+
+  // aggregates.forEach((aggregate) => {
+  //   const mermaidErd = new MermaidErd(aggregate.tables);
+  //   const erdDiagram = mermaidErd.render();
+  // });
+
+  const markdown = new Markdown(aggregates);
+  const markdownContent = markdown.render();
+  fs.writeFileSync("erd.md", markdownContent);
 };
 
 main();

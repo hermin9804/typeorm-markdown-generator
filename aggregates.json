@@ -1,0 +1,365 @@
+[
+  {
+    "namespace": "Post",
+    "documents": [
+      {
+        "name": "Comment",
+        "docs": [
+          "Comment entity represents a comment on a post in the application.\n@namespace Post"
+        ],
+        "tags": [
+          {
+            "name": "namespace",
+            "text": "Post"
+          }
+        ],
+        "properties": [
+          {
+            "name": "id",
+            "docs": [
+              "Primary key for the comment."
+            ],
+            "type": "number"
+          },
+          {
+            "name": "content",
+            "docs": [
+              "Content of the comment."
+            ],
+            "type": "string"
+          },
+          {
+            "name": "post",
+            "docs": [
+              "Post to which the comment belongs."
+            ],
+            "type": "import(\"/Users/min/Project/typeorm-markdown/src/entities/post.entity\").Post"
+          }
+        ]
+      },
+      {
+        "name": "Post",
+        "docs": [
+          "Post entity represents a blog post in the application.\n@namespace Post\n@namespace User"
+        ],
+        "tags": [
+          {
+            "name": "namespace",
+            "text": "Post"
+          },
+          {
+            "name": "namespace",
+            "text": "User"
+          }
+        ],
+        "properties": [
+          {
+            "name": "id",
+            "docs": [
+              "Primary key for the post."
+            ],
+            "type": "number"
+          },
+          {
+            "name": "title",
+            "docs": [
+              "Title of the post."
+            ],
+            "type": "string"
+          },
+          {
+            "name": "content",
+            "docs": [
+              "Content of the post."
+            ],
+            "type": "string"
+          },
+          {
+            "name": "user",
+            "docs": [
+              "User who created the post."
+            ],
+            "type": "import(\"/Users/min/Project/typeorm-markdown/src/entities/user.entity\").User"
+          },
+          {
+            "name": "comments",
+            "docs": [
+              "List of comments on the post."
+            ],
+            "type": "import(\"/Users/min/Project/typeorm-markdown/src/entities/comment.entity\").Comment[]"
+          }
+        ]
+      }
+    ],
+    "tables": [
+      {
+        "name": "comment",
+        "columns": [
+          {
+            "type": "integer",
+            "name": "id",
+            "isPrimary": true,
+            "isForeignKey": false
+          },
+          {
+            "type": "varchar",
+            "name": "content",
+            "isPrimary": false,
+            "isForeignKey": false
+          },
+          {
+            "type": "integer",
+            "name": "postId",
+            "isPrimary": false,
+            "isForeignKey": true
+          }
+        ],
+        "relations": [
+          {
+            "relationType": "many-to-one",
+            "propertyPath": "post",
+            "isOwning": true,
+            "nullable": true,
+            "inverseSidePropertyPath": "comments",
+            "source": "comment",
+            "target": "post"
+          }
+        ]
+      },
+      {
+        "name": "post",
+        "columns": [
+          {
+            "type": "integer",
+            "name": "id",
+            "isPrimary": true,
+            "isForeignKey": false
+          },
+          {
+            "type": "varchar",
+            "name": "title",
+            "isPrimary": false,
+            "isForeignKey": false
+          },
+          {
+            "type": "varchar",
+            "name": "content",
+            "isPrimary": false,
+            "isForeignKey": false
+          },
+          {
+            "type": "integer",
+            "name": "userId",
+            "isPrimary": false,
+            "isForeignKey": true
+          }
+        ],
+        "relations": [
+          {
+            "relationType": "many-to-one",
+            "propertyPath": "user",
+            "isOwning": true,
+            "nullable": true,
+            "inverseSidePropertyPath": "posts",
+            "source": "post",
+            "target": "user"
+          },
+          {
+            "relationType": "one-to-many",
+            "propertyPath": "comments",
+            "isOwning": false,
+            "nullable": false,
+            "inverseSidePropertyPath": "post",
+            "source": "post",
+            "target": "comment"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "User",
+    "documents": [
+      {
+        "name": "Post",
+        "docs": [
+          "Post entity represents a blog post in the application.\n@namespace Post\n@namespace User"
+        ],
+        "tags": [
+          {
+            "name": "namespace",
+            "text": "Post"
+          },
+          {
+            "name": "namespace",
+            "text": "User"
+          }
+        ],
+        "properties": [
+          {
+            "name": "id",
+            "docs": [
+              "Primary key for the post."
+            ],
+            "type": "number"
+          },
+          {
+            "name": "title",
+            "docs": [
+              "Title of the post."
+            ],
+            "type": "string"
+          },
+          {
+            "name": "content",
+            "docs": [
+              "Content of the post."
+            ],
+            "type": "string"
+          },
+          {
+            "name": "user",
+            "docs": [
+              "User who created the post."
+            ],
+            "type": "import(\"/Users/min/Project/typeorm-markdown/src/entities/user.entity\").User"
+          },
+          {
+            "name": "comments",
+            "docs": [
+              "List of comments on the post."
+            ],
+            "type": "import(\"/Users/min/Project/typeorm-markdown/src/entities/comment.entity\").Comment[]"
+          }
+        ]
+      },
+      {
+        "name": "User",
+        "docs": [
+          "User entity represents a user in the application.\n@namespace User"
+        ],
+        "tags": [
+          {
+            "name": "namespace",
+            "text": "User"
+          }
+        ],
+        "properties": [
+          {
+            "name": "id",
+            "docs": [
+              "Primary key for the user."
+            ],
+            "type": "number"
+          },
+          {
+            "name": "username",
+            "docs": [
+              "Username of the user."
+            ],
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "docs": [
+              "Email of the user."
+            ],
+            "type": "string"
+          },
+          {
+            "name": "posts",
+            "docs": [
+              "List of posts created by the user."
+            ],
+            "type": "import(\"/Users/min/Project/typeorm-markdown/src/entities/post.entity\").Post[]"
+          }
+        ]
+      }
+    ],
+    "tables": [
+      {
+        "name": "post",
+        "columns": [
+          {
+            "type": "integer",
+            "name": "id",
+            "isPrimary": true,
+            "isForeignKey": false
+          },
+          {
+            "type": "varchar",
+            "name": "title",
+            "isPrimary": false,
+            "isForeignKey": false
+          },
+          {
+            "type": "varchar",
+            "name": "content",
+            "isPrimary": false,
+            "isForeignKey": false
+          },
+          {
+            "type": "integer",
+            "name": "userId",
+            "isPrimary": false,
+            "isForeignKey": true
+          }
+        ],
+        "relations": [
+          {
+            "relationType": "many-to-one",
+            "propertyPath": "user",
+            "isOwning": true,
+            "nullable": true,
+            "inverseSidePropertyPath": "posts",
+            "source": "post",
+            "target": "user"
+          },
+          {
+            "relationType": "one-to-many",
+            "propertyPath": "comments",
+            "isOwning": false,
+            "nullable": false,
+            "inverseSidePropertyPath": "post",
+            "source": "post",
+            "target": "comment"
+          }
+        ]
+      },
+      {
+        "name": "user",
+        "columns": [
+          {
+            "type": "integer",
+            "name": "id",
+            "isPrimary": true,
+            "isForeignKey": false
+          },
+          {
+            "type": "varchar",
+            "name": "username",
+            "isPrimary": false,
+            "isForeignKey": false
+          },
+          {
+            "type": "varchar",
+            "name": "email",
+            "isPrimary": false,
+            "isForeignKey": false
+          }
+        ],
+        "relations": [
+          {
+            "relationType": "one-to-many",
+            "propertyPath": "posts",
+            "isOwning": false,
+            "nullable": false,
+            "inverseSidePropertyPath": "user",
+            "source": "user",
+            "target": "post"
+          }
+        ]
+      }
+    ]
+  }
+]

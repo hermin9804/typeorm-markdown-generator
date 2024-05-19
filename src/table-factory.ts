@@ -1,36 +1,7 @@
 import { DataSource, EntityMetadata, EntitySchema } from "typeorm";
 import { ConnectionMetadataBuilder } from "typeorm/connection/ConnectionMetadataBuilder";
 import { RelationMetadata } from "typeorm/metadata/RelationMetadata";
-
-export interface ITable {
-  name: string;
-  columns: IColumn[];
-  relations: IRelation[];
-}
-
-interface IColumn {
-  type: string;
-  name: string;
-  isPrimary: boolean;
-  isForeignKey: boolean;
-}
-
-interface IRelation {
-  relationType: RelationType;
-  propertyPath: string;
-  nullable: boolean;
-  isOwning: boolean;
-  inverseSidePropertyPath: string;
-  source: string;
-  target: string;
-  joinTableName: string;
-}
-
-type RelationType =
-  | "one-to-one"
-  | "one-to-many"
-  | "many-to-one"
-  | "many-to-many";
+import { IColumn, IRelation, ITable } from "./types";
 
 export class TableFactory {
   private dataSource: DataSource;
