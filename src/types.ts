@@ -1,4 +1,4 @@
-// typeorm entity metadata를 파싱한 결과를 담을 인터페이스 --------------------
+// typeorm entity metadata를 파싱한 결과를 담을 인터페이스.
 export interface ITable {
   name: string;
   columns: IColumn[];
@@ -29,11 +29,11 @@ export type RelationType =
   | "many-to-one"
   | "many-to-many";
 
-// jsDoc를 파싱한 결과를 담을 인터페이스 -------------------------------------
+// jsDoc를 파싱한 결과를 담을 인터페이스.
 export interface IEntityDocument {
   name: string;
   docs: string[];
-  tags: { name: string; text: any }[];
+  namespaces: string[];
   properties: IPropertyDocument[];
 }
 
@@ -42,7 +42,7 @@ export interface IPropertyDocument {
   docs: string[];
 }
 
-// Markdown의 각 색션을 담을 인터페이스 ---------------------------------------
+// Markdown의 각 색션을 담을 인터페이스.
 export interface IAggregate {
   namespace: string;
   documents: IEntityDocument[];

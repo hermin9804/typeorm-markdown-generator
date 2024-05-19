@@ -7,33 +7,27 @@
         "docs": [
           "Comment entity represents a comment on a post in the application.\n@namespace Post"
         ],
-        "tags": [
-          {
-            "name": "namespace",
-            "text": "Post"
-          }
+        "namespaces": [
+          "Post"
         ],
         "properties": [
           {
             "name": "id",
             "docs": [
               "Primary key for the comment."
-            ],
-            "type": "number"
+            ]
           },
           {
             "name": "content",
             "docs": [
               "Content of the comment."
-            ],
-            "type": "string"
+            ]
           },
           {
             "name": "post",
             "docs": [
               "Post to which the comment belongs."
-            ],
-            "type": "import(\"/Users/min/Project/typeorm-markdown/src/entities/post.entity\").Post"
+            ]
           }
         ]
       },
@@ -42,51 +36,40 @@
         "docs": [
           "Post entity represents a blog post in the application.\n@namespace Post\n@namespace User"
         ],
-        "tags": [
-          {
-            "name": "namespace",
-            "text": "Post"
-          },
-          {
-            "name": "namespace",
-            "text": "User"
-          }
+        "namespaces": [
+          "Post",
+          "User"
         ],
         "properties": [
           {
             "name": "id",
             "docs": [
               "Primary key for the post."
-            ],
-            "type": "number"
+            ]
           },
           {
             "name": "title",
             "docs": [
               "Title of the post."
-            ],
-            "type": "string"
+            ]
           },
           {
             "name": "content",
             "docs": [
               "Content of the post."
-            ],
-            "type": "string"
+            ]
           },
           {
             "name": "user",
             "docs": [
               "User who created the post."
-            ],
-            "type": "import(\"/Users/min/Project/typeorm-markdown/src/entities/user.entity\").User"
+            ]
           },
           {
             "name": "comments",
             "docs": [
               "List of comments on the post."
-            ],
-            "type": "import(\"/Users/min/Project/typeorm-markdown/src/entities/comment.entity\").Comment[]"
+            ]
           }
         ]
       }
@@ -156,15 +139,6 @@
         ],
         "relations": [
           {
-            "relationType": "many-to-one",
-            "propertyPath": "user",
-            "isOwning": true,
-            "nullable": true,
-            "inverseSidePropertyPath": "posts",
-            "source": "post",
-            "target": "user"
-          },
-          {
             "relationType": "one-to-many",
             "propertyPath": "comments",
             "isOwning": false,
@@ -185,51 +159,40 @@
         "docs": [
           "Post entity represents a blog post in the application.\n@namespace Post\n@namespace User"
         ],
-        "tags": [
-          {
-            "name": "namespace",
-            "text": "Post"
-          },
-          {
-            "name": "namespace",
-            "text": "User"
-          }
+        "namespaces": [
+          "Post",
+          "User"
         ],
         "properties": [
           {
             "name": "id",
             "docs": [
               "Primary key for the post."
-            ],
-            "type": "number"
+            ]
           },
           {
             "name": "title",
             "docs": [
               "Title of the post."
-            ],
-            "type": "string"
+            ]
           },
           {
             "name": "content",
             "docs": [
               "Content of the post."
-            ],
-            "type": "string"
+            ]
           },
           {
             "name": "user",
             "docs": [
               "User who created the post."
-            ],
-            "type": "import(\"/Users/min/Project/typeorm-markdown/src/entities/user.entity\").User"
+            ]
           },
           {
             "name": "comments",
             "docs": [
               "List of comments on the post."
-            ],
-            "type": "import(\"/Users/min/Project/typeorm-markdown/src/entities/comment.entity\").Comment[]"
+            ]
           }
         ]
       },
@@ -238,40 +201,33 @@
         "docs": [
           "User entity represents a user in the application.\n@namespace User"
         ],
-        "tags": [
-          {
-            "name": "namespace",
-            "text": "User"
-          }
+        "namespaces": [
+          "User"
         ],
         "properties": [
           {
             "name": "id",
             "docs": [
               "Primary key for the user."
-            ],
-            "type": "number"
+            ]
           },
           {
             "name": "username",
             "docs": [
               "Username of the user."
-            ],
-            "type": "string"
+            ]
           },
           {
             "name": "email",
             "docs": [
               "Email of the user."
-            ],
-            "type": "string"
+            ]
           },
           {
             "name": "posts",
             "docs": [
               "List of posts created by the user."
-            ],
-            "type": "import(\"/Users/min/Project/typeorm-markdown/src/entities/post.entity\").Post[]"
+            ]
           }
         ]
       }
@@ -314,15 +270,6 @@
             "inverseSidePropertyPath": "posts",
             "source": "post",
             "target": "user"
-          },
-          {
-            "relationType": "one-to-many",
-            "propertyPath": "comments",
-            "isOwning": false,
-            "nullable": false,
-            "inverseSidePropertyPath": "post",
-            "source": "post",
-            "target": "comment"
           }
         ]
       },

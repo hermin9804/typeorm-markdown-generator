@@ -18,7 +18,6 @@ erDiagram
     integer userId FK
   }
   comment }|--|| post: post
-  post }|--|| user: user
 ```
 
 ### Comment
@@ -45,16 +44,16 @@ Post entity represents a blog post in the application.
 ## User
 ```mermaid
 erDiagram
-  user {
-    integer id PK
-    varchar username
-    varchar email
-  }
   post {
     integer id PK
     varchar title
     varchar content
     integer userId FK
+  }
+  user {
+    integer id PK
+    varchar username
+    varchar email
   }
   post }|--|| user: user
 ```

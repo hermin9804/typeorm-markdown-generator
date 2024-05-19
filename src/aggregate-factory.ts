@@ -1,7 +1,7 @@
 import { DataSource } from "typeorm";
 import { EntityDocumentFactory } from "./entity-document-factory";
 import { TableFactory } from "./table-factory";
-import { IAggregate, IEntityDocument, ITable } from "./types";
+import { IAggregate, ITable } from "./types";
 
 export class AggregateFactory {
   private readonly entityDocumentFactory: EntityDocumentFactory;
@@ -15,61 +15,55 @@ export class AggregateFactory {
   public async createAggregates(): Promise<IAggregate[]> {
     const entityDocuments = this.entityDocumentFactory.createEntityDocument();
     const tables = await this.tableFactory.getTables();
+    const uniqueNamespaces = this.getUniqueNamespaces(entityDocuments);
 
-    const namespaceMap: Map<string, IEntityDocument[]> = new Map();
-
-    entityDocuments.forEach((entityDocument) => {
-      const namespaces = entityDocument.tags
-        .filter((tag) => tag.name === "namespace")
-        .map((tag) => tag.text);
-
-      if (namespaces.length === 0) {
-        namespaces.push("unknown");
-      }
-
-      namespaces.forEach((namespace) => {
-        if (!namespaceMap.has(namespace)) {
-          namespaceMap.set(namespace, []);
-        }
-        namespaceMap.get(namespace)!.push(entityDocument);
-      });
-    });
-
-    const result: IAggregate[] = [];
-
-    namespaceMap.forEach((documents, namespace) => {
-      const matchingTables = tables.filter((table) =>
-        documents.some(
-          (doc) => doc.name.toLowerCase() === table.name.toLowerCase()
-        )
+    return uniqueNamespaces.map((namespace) => {
+      const documentsInNamespace = this.getDocumentsInNamespace(
+        entityDocuments,
+        namespace
       );
+      const matchingTables = this.getMatchingTables(
+        documentsInNamespace,
+        tables
+      );
+      const filteredTables = this.filterTableRelations(matchingTables);
 
-      result.push({
+      return {
         namespace,
-        documents,
-        tables: matchingTables,
-      });
+        documents: documentsInNamespace,
+        tables: filteredTables,
+      };
     });
+  }
 
-    return result;
+  private getUniqueNamespaces(entityDocuments: any[]): string[] {
+    const namespaces = entityDocuments.flatMap((doc) => doc.namespaces);
+    return Array.from(new Set(namespaces));
+  }
+
+  private getDocumentsInNamespace(
+    entityDocuments: any[],
+    namespace: string
+  ): any[] {
+    return entityDocuments.filter((doc) => doc.namespaces.includes(namespace));
+  }
+
+  private getMatchingTables(documents: any[], tables: ITable[]): ITable[] {
+    return tables.filter((table) =>
+      documents.some(
+        (doc) => doc.name.toLowerCase() === table.name.toLowerCase()
+      )
+    );
+  }
+
+  // Filter out relations that point to tables not in the current aggregate
+  private filterTableRelations(tables: ITable[]): ITable[] {
+    const tableNames = new Set(tables.map((table) => table.name.toLowerCase()));
+    return tables.map((table) => ({
+      ...table,
+      relations: table.relations.filter((relation) =>
+        tableNames.has(relation.target.toLowerCase())
+      ),
+    }));
   }
 }
-
-// // Use the AggregateFactory to create aggregates
-// const sourceFilePath = "src/entities/*.ts";
-// const dataSource = new DataSource({
-//   type: "mysql", // or your database type
-//   host: "localhost",
-//   port: 3306,
-//   username: "test",
-//   password: "test",
-//   database: "test",
-//   synchronize: true,
-//   logging: false,
-//   entities: ["src/entities/**/*.ts"],
-// });
-
-// const aggregateFactory = new AggregateFactory(sourceFilePath, dataSource);
-// aggregateFactory.createAggregates().then((aggregates) => {
-//   fs.writeFileSync("aggregates.json", JSON.stringify(aggregates, null, 2));
-// });

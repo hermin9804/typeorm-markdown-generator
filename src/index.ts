@@ -36,7 +36,7 @@ const main = async () => {
 
   const aggregateFactory = new AggregateFactory(entityPath, connection);
   const aggregates = await aggregateFactory.createAggregates();
-  // fs.writeFileSync("aggregates.json", JSON.stringify(aggregates, null, 2));
+  fs.writeFileSync("aggregates.json", JSON.stringify(aggregates, null, 2));
 
   // aggregates.forEach((aggregate) => {
   //   const mermaidErd = new MermaidErd(aggregate.tables);
