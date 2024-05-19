@@ -7,7 +7,7 @@ import { EntityDocumentFactory } from "./entity-document-factory";
 import { AggregateFactory } from "./aggregate-factory";
 import { Markdown } from "./markdown";
 
-const entityPath = "src/entities/*.entity.ts";
+const entityPath = "src/examples/basic/entities/*.entity.ts";
 
 const AppDataSource = new DataSource({
   type: "sqlite",
@@ -23,9 +23,9 @@ const main = async () => {
   // const mermaidErd = new MermaidErd(tables);
   // const erdDiagram = mermaidErd.render();
 
-  // const tableFactory = new TableFactory(connection);
-  // const tables = await tableFactory.getTables();
-  // console.log(tables);
+  const tableFactory = new TableFactory(connection);
+  const tables = await tableFactory.getTables();
+  // fs.writeFileSync("tables.json", JSON.stringify(tables, null, 2));
 
   // const entityDocumentFactory = new EntityDocumentFactory(entityPath);
   // const entityDocuments = entityDocumentFactory.createEntityDocument();
@@ -36,7 +36,7 @@ const main = async () => {
 
   const aggregateFactory = new AggregateFactory(entityPath, connection);
   const aggregates = await aggregateFactory.createAggregates();
-  fs.writeFileSync("aggregates.json", JSON.stringify(aggregates, null, 2));
+  // fs.writeFileSync("aggregates.json", JSON.stringify(aggregates, null, 2));
 
   // aggregates.forEach((aggregate) => {
   //   const mermaidErd = new MermaidErd(aggregate.tables);

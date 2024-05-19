@@ -27,7 +27,6 @@ export class AggregateFactory {
         tables
       );
       const filteredTables = this.filterTableRelations(matchingTables);
-
       return {
         namespace,
         documents: documentsInNamespace,
