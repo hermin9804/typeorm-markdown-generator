@@ -133,6 +133,3 @@ dist
 # sqlite files
 *.sqlite
 
-
-# example files
-examples/

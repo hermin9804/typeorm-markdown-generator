@@ -14,15 +14,35 @@ erDiagram
     integer id PK
     varchar content
     integer postId FK
+    integer parentId FK
+  }
+  category {
+    integer id PK
+    varchar name
   }
   post {
     integer id PK
     varchar title
     varchar content
     integer userId FK
+    integer categoryId FK
   }
   comment }|--|| post: post
+  comment }|--|| comment: parent
+  post }|--|| category: category
 ```
+
+### category
+
+Category entity represents a category of posts.
+@namespace Post
+
+**Properties**
+
+  - `id`: Primary key for the category.
+  - `name`: Name of the category.
+  - `posts`: List of posts under this category.
+
 
 ### comment
 
@@ -34,11 +54,13 @@ Comment entity represents a comment on a post in the application.
   - `id`: Primary key for the comment.
   - `content`: Content of the comment.
   - `post`: Post to which the comment belongs.
+  - `parent`: Parent comment of the current comment.
+  - `replies`: Replies to the current comment.
 
 
 ### post
 
-Post entity represents a blog post in the application.
+Post entity represents a post in the application.
 @namespace Post
 @namespace User
 
@@ -48,7 +70,8 @@ Post entity represents a blog post in the application.
   - `title`: Title of the post.
   - `content`: Content of the post.
   - `user`: User who created the post.
-  - `comments`: List of comments on the post.
+  - `comments`: Comments on the post.
+  - `category`: Category of the post.
 
 
 ## User
@@ -60,6 +83,12 @@ erDiagram
     varchar title
     varchar content
     integer userId FK
+    integer categoryId FK
+  }
+  profile {
+    integer id PK
+    varchar bio
+    integer userId FK
   }
   user {
     integer id PK
@@ -67,11 +96,12 @@ erDiagram
     varchar email
   }
   post }|--|| user: user
+  profile ||--|| user: user
 ```
 
 ### post
 
-Post entity represents a blog post in the application.
+Post entity represents a post in the application.
 @namespace Post
 @namespace User
 
@@ -81,7 +111,20 @@ Post entity represents a blog post in the application.
   - `title`: Title of the post.
   - `content`: Content of the post.
   - `user`: User who created the post.
-  - `comments`: List of comments on the post.
+  - `comments`: Comments on the post.
+  - `category`: Category of the post.
+
+
+### profile
+
+Profile entity represents additional user details.
+@namespace User
+
+**Properties**
+
+  - `id`: Primary key for the profile.
+  - `bio`: Biography of the user.
+  - `user`: User associated with this profile.
 
 
 ### user
@@ -95,4 +138,5 @@ User entity represents a user in the application.
   - `username`: Username of the user.
   - `email`: Email of the user.
   - `posts`: List of posts created by the user.
+  - `profile`: Profile associated with the user.
 
