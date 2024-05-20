@@ -1,16 +1,19 @@
 import { ClassDeclaration, Project, ts } from "ts-morph";
-import { IEntityDocument } from "./types";
+import { IClassDoc } from "../structures";
 
-export class EntityDocumentFactory {
+export class EntityDocAnalyzer {
   private readonly project: Project;
 
   constructor(sourceFilePath: string) {
     this.project = new Project();
     this.project.addSourceFilesAtPaths(sourceFilePath);
+    if (this.project.getSourceFiles().length === 0) {
+      throw new Error("No source files found.");
+    }
   }
 
-  public createEntityDocument(): IEntityDocument[] {
-    const result: IEntityDocument[] = [];
+  public analyze(): IClassDoc[] {
+    const result: IClassDoc[] = [];
     const sourceFiles = this.project.getSourceFiles();
     sourceFiles.forEach((sourceFile) => {
       sourceFile.getClasses().forEach((cls) => {
@@ -20,7 +23,7 @@ export class EntityDocumentFactory {
     return result;
   }
 
-  private createEntity(cls: ClassDeclaration): IEntityDocument {
+  private createEntity(cls: ClassDeclaration): IClassDoc {
     return {
       name: this.extractEntityName(cls),
       docs: cls.getJsDocs().map((doc) => doc.getInnerText().trim()),

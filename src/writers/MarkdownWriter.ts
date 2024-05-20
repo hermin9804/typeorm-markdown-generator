@@ -1,11 +1,11 @@
-import { IAggregate } from "./types";
-import { MermaidErd } from "./mermaid-erd";
+import { INamespace } from "../structures";
+import { MermaidErdWriter } from "./MermaidErdWriter";
 
-export class Markdown {
-  private aggregates: IAggregate[];
+export class MarkdownWriter {
+  private namespaces: INamespace[];
 
-  constructor(aggregates: IAggregate[]) {
-    this.aggregates = aggregates;
+  constructor(namespaces: INamespace[]) {
+    this.namespaces = namespaces;
   }
 
   public render(): string {
@@ -24,7 +24,7 @@ export class Markdown {
   private generateTOC(markdownLines: string[]): void {
     markdownLines.push("\n");
 
-    this.aggregates.forEach((aggregate) => {
+    this.namespaces.forEach((aggregate) => {
       markdownLines.push(
         `- [${aggregate.namespace}](#${aggregate.namespace.toLowerCase()})`
       );
@@ -34,13 +34,13 @@ export class Markdown {
   }
 
   private generateBodyContent(markdownLines: string[]): void {
-    this.aggregates.forEach((aggregate) => {
+    this.namespaces.forEach((aggregate) => {
       markdownLines.push(`## ${aggregate.namespace}\n`);
-      const mermaidErd = new MermaidErd(aggregate.tables);
+      const mermaidErd = new MermaidErdWriter(aggregate.tables);
       const erdDiagram = mermaidErd.render();
       markdownLines.push("```mermaid\n" + erdDiagram + "\n```\n");
 
-      aggregate.documents.forEach((doc) => {
+      aggregate.classDocs.forEach((doc) => {
         this.generateDocumentContent(markdownLines, doc);
       });
     });

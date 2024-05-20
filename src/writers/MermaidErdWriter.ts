@@ -1,4 +1,4 @@
-import { ITable } from "./types";
+import { ITable } from "../structures";
 
 const RelationShips = {
   left: {
@@ -19,7 +19,7 @@ const RelationShips = {
  * Render a mermaid ERD based on the spec here:
  * https://mermaid-js.github.io/mermaid/#/entityRelationshipDiagram
  */
-export class MermaidErd {
+export class MermaidErdWriter {
   private tables: ITable[];
 
   constructor(tables: ITable[]) {

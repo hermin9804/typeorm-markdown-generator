@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from "typeorm";
 import { UserEntity } from "./user.entity";
 import { Comment } from "./comment.entity";
@@ -47,8 +48,15 @@ export class Post {
   comments!: Comment[];
 
   /**
+   * Category ID of the post.
+   */
+  @Column()
+  categoryId!: number;
+
+  /**
    * Category of the post.
    */
   @ManyToOne(() => Category, (category) => category.posts)
+  @JoinColumn({ name: "categoryId" })
   category!: Category;
 }

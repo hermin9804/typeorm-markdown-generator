@@ -24,8 +24,8 @@ erDiagram
     integer id PK
     varchar title
     varchar content
-    integer userId FK
     integer categoryId FK
+    integer userId FK
   }
   comment }|--|| post: post
   comment }|--|| comment: parent
@@ -53,7 +53,9 @@ Comment entity represents a comment on a post in the application.
 
   - `id`: Primary key for the comment.
   - `content`: Content of the comment.
+  - `postId`: 
   - `post`: Post to which the comment belongs.
+  - `parentId`: 
   - `parent`: Parent comment of the current comment.
   - `replies`: Replies to the current comment.
 
@@ -71,6 +73,7 @@ Post entity represents a post in the application.
   - `content`: Content of the post.
   - `user`: User who created the post.
   - `comments`: Comments on the post.
+  - `categoryId`: Category ID of the post.
   - `category`: Category of the post.
 
 
@@ -78,25 +81,25 @@ Post entity represents a post in the application.
 
 ```mermaid
 erDiagram
-  post {
-    integer id PK
-    varchar title
-    varchar content
-    integer userId FK
-    integer categoryId FK
-  }
   profile {
     integer id PK
     varchar bio
     integer userId FK
   }
-  user {
+  user_entity {
     integer id PK
     varchar username
     varchar email
   }
-  post }|--|| user: user
-  profile ||--|| user: user
+  post {
+    integer id PK
+    varchar title
+    varchar content
+    integer categoryId FK
+    integer userId FK
+  }
+  profile ||--|| user_entity: user
+  post }|--|| user_entity: user
 ```
 
 ### post
@@ -112,6 +115,7 @@ Post entity represents a post in the application.
   - `content`: Content of the post.
   - `user`: User who created the post.
   - `comments`: Comments on the post.
+  - `categoryId`: Category ID of the post.
   - `category`: Category of the post.
 
 
@@ -127,7 +131,7 @@ Profile entity represents additional user details.
   - `user`: User associated with this profile.
 
 
-### user
+### user_entity
 
 User entity represents a user in the application.
 @namespace User

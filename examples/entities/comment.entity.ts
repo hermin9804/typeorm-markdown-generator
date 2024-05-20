@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from "typeorm";
 import { Post } from "./post.entity";
 
@@ -25,11 +26,18 @@ export class Comment {
   @Column()
   content!: string;
 
+  @Column()
+  postId!: number;
+
   /**
    * Post to which the comment belongs.
    */
   @ManyToOne(() => Post, (post) => post.comments)
+  @JoinColumn({ name: "postId" })
   post!: Post;
+
+  @Column()
+  parentId!: number;
 
   /**
    * Parent comment of the current comment.
