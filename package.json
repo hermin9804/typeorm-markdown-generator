@@ -1,8 +1,9 @@
 {
   "name": "typeorm-markdown-generator",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "A tool to generate markdown documentation from TypeORM entities",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
@@ -17,6 +18,7 @@
   "author": "hermin",
   "license": "MIT",
   "dependencies": {
+    "fs-extra": "^11.2.0",
     "ts-morph": "^22.0.0",
     "typeorm": "^0.3.20"
   },

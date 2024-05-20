@@ -1,6 +1,8 @@
 import { DataSource } from "typeorm";
 import { TypeormMarkdownGenerator } from "../src/TypeormMarkdownGenerator";
+import path from "path";
 
+// const entityPath = path.resolve(__dirname, "../test/entities/*.entity.ts");
 const entityPath = "test/entities/*.entity.ts";
 
 const AppDataSource = new DataSource({

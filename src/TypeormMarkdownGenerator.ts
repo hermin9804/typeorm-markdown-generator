@@ -24,11 +24,11 @@ export class TypeormMarkdownGenerator {
 
     // Analyze metadata and documentation
     const tables = await entityMetadataAnalyzer.analyze();
-    const entityDocs = entityDocAnalyzer.analyze();
+    const entityDocs = await entityDocAnalyzer.analyze();
 
     // Create namespaces
     const namespaceFactory = new NamespaceFactory();
-    const namespaces = await namespaceFactory.create(tables, entityDocs);
+    const namespaces = namespaceFactory.create(tables, entityDocs);
 
     // Generate markdown content
     const markdownWriter = new MarkdownWriter(namespaces);

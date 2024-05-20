@@ -1,26 +1,37 @@
 import { ClassDeclaration, Project, ts } from "ts-morph";
 import { IClassDoc } from "../structures";
+import { findProjectRoot } from "../utils/findProjectRoot";
 
 export class EntityDocAnalyzer {
-  private readonly project: Project;
+  private sourceFilePath: string;
 
   constructor(sourceFilePath: string) {
-    this.project = new Project();
-    this.project.addSourceFilesAtPaths(sourceFilePath);
-    if (this.project.getSourceFiles().length === 0) {
-      throw new Error("No source files found.");
-    }
+    this.sourceFilePath = sourceFilePath;
   }
 
-  public analyze(): IClassDoc[] {
+  public async analyze(): Promise<IClassDoc[]> {
     const result: IClassDoc[] = [];
-    const sourceFiles = this.project.getSourceFiles();
+    const project = await this.loadProject();
+    const sourceFiles = project.getSourceFiles();
     sourceFiles.forEach((sourceFile) => {
       sourceFile.getClasses().forEach((cls) => {
         result.push(this.createEntity(cls));
       });
     });
     return result;
+  }
+
+  private async loadProject(): Promise<Project> {
+    const rootDir = await findProjectRoot();
+    if (!rootDir) {
+      throw new Error("Root directory not found.");
+    }
+    const project = new Project();
+    project.addSourceFilesAtPaths(`${rootDir}/${this.sourceFilePath}`);
+    if (project.getSourceFiles().length === 0) {
+      throw new Error("No source files found.");
+    }
+    return project;
   }
 
   private createEntity(cls: ClassDeclaration): IClassDoc {

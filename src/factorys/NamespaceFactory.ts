@@ -60,10 +60,7 @@
 import { IClassDoc, INamespace, ITable } from "../structures";
 
 export class NamespaceFactory {
-  public async create(
-    tables: ITable[],
-    classDocs: IClassDoc[]
-  ): Promise<INamespace[]> {
+  public create(tables: ITable[], classDocs: IClassDoc[]): INamespace[] {
     const uniqueNamespaces = this.getUniqueNamespaces(classDocs);
 
     return uniqueNamespaces.map((namespace) => {
