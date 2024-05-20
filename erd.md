@@ -81,16 +81,6 @@ Post entity represents a post in the application.
 
 ```mermaid
 erDiagram
-  profile {
-    integer id PK
-    varchar bio
-    integer userId FK
-  }
-  user_entity {
-    integer id PK
-    varchar username
-    varchar email
-  }
   post {
     integer id PK
     varchar title
@@ -98,8 +88,19 @@ erDiagram
     integer categoryId FK
     integer userId FK
   }
-  profile ||--|| user_entity: user
-  post }|--|| user_entity: user
+  user {
+    integer id PK
+    varchar username
+    varchar email
+    datetime createdAt
+  }
+  profile {
+    integer id PK
+    varchar bio
+    integer userId FK
+  }
+  post }|--|| user: user
+  profile ||--|| user: user
 ```
 
 ### post
@@ -131,7 +132,7 @@ Profile entity represents additional user details.
   - `user`: User associated with this profile.
 
 
-### user_entity
+### user
 
 User entity represents a user in the application.
 @namespace User
@@ -143,4 +144,5 @@ User entity represents a user in the application.
   - `email`: Email of the user.
   - `posts`: List of posts created by the user.
   - `profile`: Profile associated with the user.
+  - `createdAt`: 
 

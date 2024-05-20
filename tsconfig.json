@@ -5,11 +5,12 @@
     "outDir": "./dist",
     "rootDir": "./",
     "strict": true,
+    "declaration": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "test"]
+  "exclude": ["node_modules"]
 }

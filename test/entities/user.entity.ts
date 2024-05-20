@@ -4,6 +4,7 @@ import {
   Column,
   OneToMany,
   OneToOne,
+  CreateDateColumn,
 } from "typeorm";
 import { Post } from "./post.entity";
 import { Profile } from "./profile.entity";
@@ -43,4 +44,7 @@ export class UserEntity {
    */
   @OneToOne(() => Profile, (profile) => profile.user)
   profile!: Profile;
+
+  @CreateDateColumn()
+  createdAt!: Date;
 }
