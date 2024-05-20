@@ -1,5 +1,5 @@
 ---
-name: 코드 리팩터링
+name: refactor request
 about: 코드 품질, 성능 또는 유지보수를 향상시키기 위한 리팩터링을 제안하세요
 title: "[REFACTOR] "
 labels: refactor

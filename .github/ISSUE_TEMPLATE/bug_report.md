@@ -1,5 +1,5 @@
 ---
-name: 버그 리포트
+name: bug report
 about: 프로젝트 개선을 위한 버그 리포트를 생성하세요
 title: "[BUG] "
 labels: bug
