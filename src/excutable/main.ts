@@ -6,7 +6,7 @@ import { EntityDocAnalyzer } from "../analyzers/EntityDocAnalyzer";
 import { EntityMetadataAnalyzer } from "../analyzers/EntityMetadataAnalyzer";
 import { NamespaceFactory } from "../factorys/NamespaceFactory";
 
-const entityPath = "examples/entities/*.entity.ts";
+const entityPath = "test/entities/*.entity.ts";
 
 const AppDataSource = new DataSource({
   type: "sqlite",
