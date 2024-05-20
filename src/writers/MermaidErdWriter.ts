@@ -53,7 +53,7 @@ export class MermaidErdWriter {
     return this.tables
       .map((table) => {
         const columns = table.columns.map((column) => {
-          const type = column.type;
+          const type = column.type.replace(/ /g, "_");
           const name = column.name;
           const isPrimary = column.isPrimary ? "PK" : "";
           const isForeignKey = column.isForeignKey ? "FK" : "";
