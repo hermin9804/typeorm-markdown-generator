@@ -5,7 +5,7 @@ import { EntityDocAnalyzer } from "./analyzers/EntityDocAnalyzer";
 import { EntityMetadataAnalyzer } from "./analyzers/EntityMetadataAnalyzer";
 import { NamespaceFactory } from "./factorys/NamespaceFactory";
 
-export class TypeormMarkdownBuilder {
+export class TypeormMarkdownGenerator {
   private dataSource: DataSource;
   private entityPath: string;
 

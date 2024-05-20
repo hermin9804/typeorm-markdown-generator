@@ -1,6 +1,6 @@
 {
-  "name": "typeorm-markdown-builder",
-  "version": "1.0.0",
+  "name": "typeorm-markdown-generator",
+  "version": "0.0.1",
   "description": "A tool to generate markdown documentation from TypeORM entities",
   "main": "dist/index.js",
   "scripts": {

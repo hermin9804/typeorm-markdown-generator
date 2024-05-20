@@ -88,16 +88,16 @@ erDiagram
     integer categoryId FK
     integer userId FK
   }
+  profile {
+    integer id PK
+    varchar bio
+    integer userId FK
+  }
   user {
     integer id PK
     varchar username
     varchar email
     datetime createdAt
-  }
-  profile {
-    integer id PK
-    varchar bio
-    integer userId FK
   }
   post }|--|| user: user
   profile ||--|| user: user

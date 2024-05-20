@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { TypeormMarkdownBuilder } from "../src/TypeormMarkdownBuilder";
+import { TypeormMarkdownGenerator } from "../src/TypeormMarkdownGenerator";
 
 const entityPath = "test/entities/*.entity.ts";
 
@@ -12,7 +12,10 @@ const AppDataSource = new DataSource({
 });
 
 const main = async () => {
-  const typeormMarkdown = new TypeormMarkdownBuilder(AppDataSource, entityPath);
+  const typeormMarkdown = new TypeormMarkdownGenerator(
+    AppDataSource,
+    entityPath
+  );
   typeormMarkdown
     .build("erd.md")
     .then(() => {

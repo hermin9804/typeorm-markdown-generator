@@ -1,1 +1,1 @@
-export * from "./TypeormMarkdownBuilder";
+export { TypeormMarkdownGenerator } from "./TypeormMarkdownGenerator";
