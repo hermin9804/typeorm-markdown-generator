@@ -1,7 +1,11 @@
 {
   "name": "typeorm-markdown-generator",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A tool to generate markdown documentation from TypeORM entities",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hermin9804/typeorm-markdown-generator"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
