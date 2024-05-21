@@ -1,6 +1,5 @@
 import { ClassDeclaration, Project, ts } from "ts-morph";
 import { IClassDoc } from "../structures";
-import { findProjectRoot } from "../utils/findProjectRoot";
 
 export class EntityDocAnalyzer {
   private sourceFilePath: string;
@@ -22,12 +21,8 @@ export class EntityDocAnalyzer {
   }
 
   private async loadProject(): Promise<Project> {
-    const rootDir = await findProjectRoot();
-    if (!rootDir) {
-      throw new Error("Root directory not found.");
-    }
     const project = new Project();
-    project.addSourceFilesAtPaths(`${rootDir}/${this.sourceFilePath}`);
+    project.addSourceFilesAtPaths(this.sourceFilePath);
     if (project.getSourceFiles().length === 0) {
       throw new Error("No source files found.");
     }

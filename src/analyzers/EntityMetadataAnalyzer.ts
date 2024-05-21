@@ -1,16 +1,35 @@
 import { DataSource, EntityMetadata, EntitySchema } from "typeorm";
 import { ConnectionMetadataBuilder } from "typeorm/connection/ConnectionMetadataBuilder";
 import { RelationMetadata } from "typeorm/metadata/RelationMetadata";
-import { IColumn, IRelation, ITable } from "../structures";
+import {
+  IColumn,
+  IRelation,
+  ITable,
+  TTypeormMarkdownConfig,
+} from "../structures";
 
 export class EntityMetadataAnalyzer {
   private dataSource: DataSource;
 
-  constructor(dataSource: DataSource) {
-    this.dataSource = dataSource;
+  constructor(config: TTypeormMarkdownConfig) {
+    this.dataSource = new DataSource({
+      ...config,
+      entities: [config.entityPath],
+    });
+  }
+
+  private async initialize() {
+    // Initialize the connection
+    await this.dataSource.initialize();
+  }
+
+  private async destroy() {
+    // Destroy the connection
+    await this.dataSource.destroy();
   }
 
   public async analyze(): Promise<ITable[]> {
+    await this.initialize();
     const connectionMetadataBuilder = new ConnectionMetadataBuilder(
       this.dataSource
     );
@@ -28,7 +47,14 @@ export class EntityMetadataAnalyzer {
       throw Error("No entities found on connection");
     }
 
-    const tables: ITable[] = entityMetadatas.map((entity) => {
+    const tables = this.mapTables(entityMetadatas);
+
+    await this.destroy();
+    return tables;
+  }
+
+  private mapTables(entityMetadatas: EntityMetadata[]): ITable[] {
+    return entityMetadatas.map((entity) => {
       const columns: IColumn[] = entity.columns.map((column) => ({
         type: this.dataSource.driver.normalizeType(column),
         name: column.databaseName,
@@ -46,8 +72,6 @@ export class EntityMetadataAnalyzer {
         relations,
       };
     });
-
-    return tables;
   }
 
   private resolveRelation(

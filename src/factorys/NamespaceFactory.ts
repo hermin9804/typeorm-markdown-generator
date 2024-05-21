@@ -15,7 +15,7 @@ export class NamespaceFactory {
       );
       const filteredTables = this.filterTableRelations(matchingTables);
       return {
-        namespace,
+        name: namespace,
         classDocs: classDocsInNamespace,
         tables: filteredTables,
       };

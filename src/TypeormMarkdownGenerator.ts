@@ -1,43 +1,38 @@
-import fs from "fs";
-import { DataSource } from "typeorm";
+import path from "path";
 import { MarkdownWriter } from "./writers/MarkdownWriter";
 import { EntityDocAnalyzer } from "./analyzers/EntityDocAnalyzer";
 import { EntityMetadataAnalyzer } from "./analyzers/EntityMetadataAnalyzer";
 import { NamespaceFactory } from "./factorys/NamespaceFactory";
+import { TTypeormMarkdownConfig } from "./structures";
 
 export class TypeormMarkdownGenerator {
-  private dataSource: DataSource;
-  private entityPath: string;
+  private readonly config: TTypeormMarkdownConfig;
+  private readonly entityPathFromRoot: string;
+  private readonly entityMetadataAnalyzer: EntityMetadataAnalyzer;
+  private readonly entityDocAnalyzer: EntityDocAnalyzer;
+  private readonly namespaceFactory: NamespaceFactory;
+  private readonly markdownWriter: MarkdownWriter;
 
-  constructor(dataSource: DataSource, entityPath: string) {
-    this.dataSource = dataSource;
-    this.entityPath = entityPath;
+  constructor(config: TTypeormMarkdownConfig, configPath: string) {
+    this.config = config;
+    this.entityPathFromRoot = `${path.dirname(configPath)}/${
+      config.entityPath
+    }`;
+    this.entityMetadataAnalyzer = new EntityMetadataAnalyzer(config);
+    this.entityDocAnalyzer = new EntityDocAnalyzer(this.entityPathFromRoot);
+    this.namespaceFactory = new NamespaceFactory();
+    this.markdownWriter = new MarkdownWriter();
   }
 
-  public async build(outputFilePath: string): Promise<void> {
-    // Initialize data source
-    const connection = await this.dataSource.initialize();
+  public async build(): Promise<void> {
+    const tables = await this.entityMetadataAnalyzer.analyze();
+    const entityDocs = await this.entityDocAnalyzer.analyze();
+    const namespaces = this.namespaceFactory.create(tables, entityDocs);
 
-    // Create analyzers
-    const entityMetadataAnalyzer = new EntityMetadataAnalyzer(connection);
-    const entityDocAnalyzer = new EntityDocAnalyzer(this.entityPath);
-
-    // Analyze metadata and documentation
-    const tables = await entityMetadataAnalyzer.analyze();
-    const entityDocs = await entityDocAnalyzer.analyze();
-
-    // Create namespaces
-    const namespaceFactory = new NamespaceFactory();
-    const namespaces = namespaceFactory.create(tables, entityDocs);
-
-    // Generate markdown content
-    const markdownWriter = new MarkdownWriter(namespaces);
-    const markdownContent = markdownWriter.render();
-
-    // Write to output file
-    fs.writeFileSync(outputFilePath, markdownContent);
-
-    // Close the connection
-    await connection.destroy();
+    this.markdownWriter.render(
+      this.config.title,
+      this.config.outFilePath,
+      namespaces
+    );
   }
 }

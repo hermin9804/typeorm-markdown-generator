@@ -23,7 +23,7 @@ To set up and use the TypeORM Markdown Documents Generator, follow these steps:
 1. **Install Dependencies**:
 
 ```sh
-npm i typeorm-markdown-generator
+npm i -D typeorm-markdown-generator
 ```
 
 2. **Configuration**:
