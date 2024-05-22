@@ -39,20 +39,28 @@ npm i -D typeorm-markdown-generator
 
 ### Configuration
 
-By default, the TypeORM Markdown Generator looks for a configuration file named `typeorm-markdown.json` in the root of your project. Below is an example configuration for SQLite:
+By default, the TypeORM Markdown Generator looks for a configuration file named `typeorm-markdown.json` in the root of your project. Below is an example configuration for PostgreSQL:
 
-#### SQLite Example
+### PostgreSQL
 
 - **type**: Database type (required)
-- **database**: Path to your database file (required)
+- **host**: Database host (required)
+- **port**: Database port (required)
+- **username**: Database user name (required)
+- **password**: Database password (required)
+- **database**: Database name (required)
 - **entitypath**: TypeORM entity path (required)
 - **outfilepath**: Output file path (optional, default: docs/erd.md)
 - **title**: Markdown title (optional, default: ERD)
 
 ```json
 {
-  "type": "sqlite",
-  "database": "path/to/your_database.sqlite",
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "your_username",
+  "password": "your_password",
+  "database": "your_database",
   "entitypath": "src/database/entities/*.entity.ts",
   "title": "ERD",
   "outfilepath": "docs/erd.md"
