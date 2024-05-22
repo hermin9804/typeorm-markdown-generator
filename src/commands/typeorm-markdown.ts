@@ -2,17 +2,28 @@
 
 import fs from "fs";
 import path from "path";
+import { Command } from "commander";
 import { TypeormMarkdownGenerator } from "../TypeormMarkdownGenerator";
 import { ITypeormMarkdownConfig } from "../structures";
 import { validateConfig } from "../utils/validateConfig";
 
-// Default config file path
-const configPath = path.resolve(process.cwd(), "typeorm-markdown.json");
+const program = new Command();
+
+program
+  .option(
+    "-c, --config <path>",
+    "specify config file path",
+    "typeorm-markdown.json"
+  )
+  .parse(process.argv);
+
+const options = program.opts();
+const configPath = path.resolve(process.cwd(), options.config);
 
 // Ensure the config file exists
 if (!fs.existsSync(configPath)) {
   console.error(
-    `Config file not found at ${configPath}. Please create a typeorm-markdown.json file in the root of your project.`
+    `Config file not found at ${configPath}. Please create a ${options.config} file in the root of your project.`
   );
   process.exit(1);
 }
