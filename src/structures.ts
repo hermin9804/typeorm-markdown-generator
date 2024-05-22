@@ -59,39 +59,8 @@ export interface INamespace {
 /**
  * TypeormMarkdown Config interface
  */
-export type ITypeormMarkdownConfig = TDataSourceOptions & {
+export interface ITypeormMarkdownConfig {
   entityPath: string;
   title?: string; // default: ERD
   outFilePath?: string; // default: docs/ERD.md
-};
-
-/**
- * DataSourceOtions interface
- */
-type TDataSourceOptions =
-  | MySQLDataSourceOptions
-  | PostgreSQLDataSourceOptions
-  | SQLiteDataSourceOptions;
-
-interface MySQLDataSourceOptions {
-  readonly type: "mysql" | "mariadb";
-  readonly host: string;
-  readonly port: number;
-  readonly username: string;
-  readonly password: string;
-  readonly database: string;
-}
-
-interface PostgreSQLDataSourceOptions {
-  readonly type: "postgres";
-  readonly host: string;
-  readonly port: number;
-  readonly username: string;
-  readonly password: string;
-  readonly database: string;
-}
-
-interface SQLiteDataSourceOptions {
-  readonly type: "sqlite";
-  readonly database: string;
 }

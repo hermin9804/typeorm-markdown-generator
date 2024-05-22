@@ -11,11 +11,15 @@ import {
 export class EntityMetadataAnalyzer {
   private dataSource: DataSource;
 
-  constructor(config: ITypeormMarkdownConfig) {
-    this.dataSource = new DataSource({
-      ...config,
-      entities: [config.entityPath],
-    });
+  // constructor(config: ITypeormMarkdownConfig) {
+  //   this.dataSource = new DataSource({
+  //     ...config,
+  //     entities: [config.entityPath],
+  //   });
+  // }
+
+  constructor(dataSource: DataSource) {
+    this.dataSource = dataSource;
   }
 
   private async initialize() {
