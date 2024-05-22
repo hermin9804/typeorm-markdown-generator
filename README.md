@@ -276,7 +276,6 @@ export class User {
   "type": "mongodb",
   "host": "localhost",
   "port": 27017,
-
   "username": "your_username",
   "password": "your_password",
   "database": "your_database",

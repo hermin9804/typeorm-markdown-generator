@@ -3,7 +3,7 @@
 import fs from "fs";
 import path from "path";
 import { TypeormMarkdownGenerator } from "../TypeormMarkdownGenerator";
-import { TTypeormMarkdownConfig } from "../structures";
+import { ITypeormMarkdownConfig } from "../structures";
 import { validateConfig } from "../utils/validateConfig";
 
 // Default config file path
@@ -18,10 +18,10 @@ if (!fs.existsSync(configPath)) {
 }
 
 // Read and parse the config file
-let config: TTypeormMarkdownConfig;
+let config: ITypeormMarkdownConfig;
 try {
   const configFile = fs.readFileSync(configPath, "utf-8");
-  config = JSON.parse(configFile) as TTypeormMarkdownConfig;
+  config = JSON.parse(configFile) as ITypeormMarkdownConfig;
 } catch (error) {
   console.error(`Error reading config file at ${configPath}:`, error);
   process.exit(1);

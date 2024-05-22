@@ -3,17 +3,17 @@ import { MarkdownWriter } from "./writers/MarkdownWriter";
 import { EntityDocAnalyzer } from "./analyzers/EntityDocAnalyzer";
 import { EntityMetadataAnalyzer } from "./analyzers/EntityMetadataAnalyzer";
 import { NamespaceFactory } from "./factorys/NamespaceFactory";
-import { TTypeormMarkdownConfig } from "./structures";
+import { ITypeormMarkdownConfig } from "./structures";
 
 export class TypeormMarkdownGenerator {
-  private readonly config: TTypeormMarkdownConfig;
+  private readonly config: ITypeormMarkdownConfig;
   private readonly entityPathFromRoot: string;
   private readonly entityMetadataAnalyzer: EntityMetadataAnalyzer;
   private readonly entityDocAnalyzer: EntityDocAnalyzer;
   private readonly namespaceFactory: NamespaceFactory;
   private readonly markdownWriter: MarkdownWriter;
 
-  constructor(config: TTypeormMarkdownConfig, configPath: string) {
+  constructor(config: ITypeormMarkdownConfig, configPath: string) {
     this.config = config;
     this.entityPathFromRoot = `${path.dirname(configPath)}/${
       config.entityPath

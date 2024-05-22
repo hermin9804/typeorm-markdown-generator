@@ -59,7 +59,7 @@ export interface INamespace {
 /**
  * TypeormMarkdown Config interface
  */
-export type TTypeormMarkdownConfig = TDataSourceOptions & {
+export type ITypeormMarkdownConfig = TDataSourceOptions & {
   entityPath: string;
   title?: string; // default: ERD
   outFilePath?: string; // default: docs/ERD.md

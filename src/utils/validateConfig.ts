@@ -1,4 +1,4 @@
-import { TTypeormMarkdownConfig } from "../structures";
+import { ITypeormMarkdownConfig } from "../structures";
 
 export const DataSourceOptionsErrorMessages: { [key: string]: string } = {
   typeIsRequired: "Database type is required.",
@@ -17,7 +17,7 @@ export const DataSourceOptionsErrorMessages: { [key: string]: string } = {
     "ERROR: MongoDB configuration requires host, port, username, password, database, useNewUrlParser, useUnifiedTopology fields.",
 };
 
-export function validateConfig(config: any): config is TTypeormMarkdownConfig {
+export function validateConfig(config: any): config is ITypeormMarkdownConfig {
   if (!config) {
     console.error("Config is required.");
     return false;
