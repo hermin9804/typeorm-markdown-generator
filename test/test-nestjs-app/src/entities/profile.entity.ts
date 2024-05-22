@@ -25,10 +25,13 @@ export class Profile {
   @Column()
   bio!: string;
 
+  @Column()
+  userId!: number;
+
   /**
    * User associated with this profile.
    */
   @OneToOne(() => User)
-  @JoinColumn()
+  @JoinColumn({ name: 'userId' })
   user!: User;
 }

@@ -1,104 +1,123 @@
-# typeorm markdown generator
+# TypeORM Markdown Generator
 
-## table of contents
+## Table of Contents
 
-1. [overview](#overview)
-2. [features](#features)
-3. [example output](#example-output)
-4. [setup](#setup)
-5. [entity naming rule](#entity-naming-rule)
-6. [comment tags](#comment-tags)
-7. [configuration examples for other databases](#configuration-examples-for-other-databases)
+1. [Overview](#overview)
+2. [Features](#features)
+3. [Example Output](#example-output)
+4. [Setup](#setup)
+5. [Custom Configuration File Path](#custom-configuration-file-path)
+6. [Entity Naming Rule](#entity-naming-rule)
+7. [Comment Tags](#comment-tags)
+8. [Configuration Examples for Other Databases](#configuration-examples-for-other-databases)
 
-## overview
+## Overview
 
-this project was inspired by [prisma-markdown](https://github.com/samchon/prisma-markdown).
+This project was inspired by [prisma-markdown](https://github.com/samchon/prisma-markdown).
 
-the typeorm markdown generator creates markdown documentation for typeorm entities, featuring erd diagrams, jsdoc descriptions, and organized content.
+The TypeORM Markdown Generator creates markdown documentation for TypeORM entities, featuring ERD diagrams, JSDoc descriptions, and organized content.
 
-## features
+## Features
 
-- **mermaid erd diagrams**: automatically generate entity-relationship diagrams (erds) for visual representation of your database schema.
-- **jsdoc comments**: extract and include jsdoc comments from your typeorm entities for detailed descriptions.
-- **namespace separations**: organize your documentation by namespaces using `@namespace` comments.
+- **Mermaid ERD Diagrams**: Automatically generate entity-relationship diagrams (ERDs) for visual representation of your database schema.
+- **JSDoc Comments**: Extract and include JSDoc comments from your TypeORM entities for detailed descriptions.
+- **Namespace Separations**: Organize your documentation by namespaces using `@namespace` comments.
 
-## example output
+## Example Output
 
-- https://github.com/hermin9804/typeorm-markdown/blob/main/erd.md
+- [Example Output](https://github.com/hermin9804/typeorm-markdown/blob/main/erd.md)
 
-## setup
+## Setup
 
-to set up and use the typeorm markdown documents generator, follow these steps:
+To set up and use the TypeORM Markdown Documents Generator, follow these steps:
 
-### install dependencies
+### Install Dependencies
 
 ```sh
-npm i -d typeorm-markdown-generator
+npm i -D typeorm-markdown-generator
 ```
 
-### configuration
+### Configuration
 
-create a `typeorm-markdown.json` configuration file in the ==root of your project==. below is an example configuration for sqlite:
+By default, the TypeORM Markdown Generator looks for a configuration file named `typeorm-markdown.json` in the root of your project. Below is an example configuration for SQLite:
 
-#### sqlite example
+#### SQLite Example
 
-- **type**: database type (required)
-- **database**: path to your database file (required)
-- **entitypath**: typeorm entity path (required)
-- **outfilepath**: output file path (optional, default: docs/erd.md)
-- **title**: markdown title (optional, default: erd)
+- **type**: Database type (required)
+- **database**: Path to your database file (required)
+- **entitypath**: TypeORM entity path (required)
+- **outfilepath**: Output file path (optional, default: docs/erd.md)
+- **title**: Markdown title (optional, default: ERD)
 
 ```json
 {
   "type": "sqlite",
   "database": "path/to/your_database.sqlite",
   "entitypath": "src/database/entities/*.entity.ts",
-  "title": "erd",
-  "outfilepath": "doc/erd.md"
+  "title": "ERD",
+  "outfilepath": "docs/erd.md"
 }
 ```
 
-for configuration examples for other databases, see [configuration examples for other databases](#configuration-examples-for-other-databases).
+For configuration examples for other databases, see [Configuration Examples for Other Databases](#configuration-examples-for-other-databases).
 
-### run
+### Run
 
 ```sh
 npx typeorm-markdown
 ```
 
-## entity naming rule
+## Custom Configuration File Path
 
-the naming of the entities in the generated markdown follows these rules:
+By default, the TypeORM Markdown Generator looks for a configuration file named `typeorm-markdown.json` in the root of your project. However, you can specify a custom configuration file path using the `-c` or `--config` option when running the generator. This is useful if you have multiple configurations or prefer a different file name.
 
-- if an entity name is defined, the specified name is used.
+### Usage
+
+To use a custom configuration file, pass the `-c` or `--config` option followed by the path to your configuration file.
+
+```sh
+npx typeorm-markdown -c path/to/your_custom_config.json
+```
+
+### Example
+
+```sh
+npx typeorm-markdown -c configs/typeorm-custom-config.json
+```
+
+## Entity Naming Rule
+
+The naming of the entities in the generated markdown follows these rules:
+
+- If an entity name is defined, the specified name is used.
 
 ```ts
-@entity("custom_entity_name")
-export class customentityname {
+@Entity("custom_entity_name")
+export class CustomEntityName {
   //...
 }
 ```
 
-- if an entity name is not defined, the entity class name is converted to snake_case and used as the entity name.
+- If an entity name is not defined, the entity class name is converted to snake_case and used as the entity name.
 
 ```ts
-@entity()
-export class defaultentityname {
+@Entity()
+export class DefaultEntityName {
   //...
 }
 // will be converted to "default_entity_name"
 ```
 
-## comment tags
+## Comment Tags
 
-use the following comment tags in your typeorm entities to generate descriptive documentation:
+Use the following comment tags in your TypeORM entities to generate descriptive documentation:
 
-- `/** */` for general jsdoc comments.
-- `@namespace <name>`: both erd and markdown content
-- (todo)`@erd <name>`: only erd
-- (todo)`@describe <name>`: only markdown content
-- (todo)`@hidden`: neither erd nor markdown content
-- (todo)`@minitems 1`: mandatory relationship when 1: n (||---|{)
+- `/** */` for general JSDoc comments.
+- `@namespace <name>`: Both ERD and markdown content.
+- (TODO) `@erd <name>`: Only ERD.
+- (TODO) `@describe <name>`: Only markdown content.
+- (TODO) `@hidden`: Neither ERD nor markdown content.
+- (TODO) `@minitems 1`: Mandatory relationship when 1: N (||---|{).
 
 ```ts
 /**
@@ -133,19 +152,19 @@ export class User {
 }
 ```
 
-## configuration examples for other databases
+## Configuration Examples for Other Databases
 
-### postgresql
+### PostgreSQL
 
-- **type**: database type (required)
-- **host**: database host (required)
-- **port**: database port (required)
-- **username**: database user name (required)
-- **password**: database password (required)
-- **database**: database name (required)
-- **entitypath**: typeorm entity path (required)
-- **outfilepath**: output file path (optional, default: docs/erd.md)
-- **title**: markdown title (optional, default: erd)
+- **type**: Database type (required)
+- **host**: Database host (required)
+- **port**: Database port (required)
+- **username**: Database user name (required)
+- **password**: Database password (required)
+- **database**: Database name (required)
+- **entitypath**: TypeORM entity path (required)
+- **outfilepath**: Output file path (optional, default: docs/erd.md)
+- **title**: Markdown title (optional, default: ERD)
 
 ```json
 {
@@ -156,22 +175,22 @@ export class User {
   "password": "your_password",
   "database": "your_database",
   "entitypath": "src/database/entities/*.entity.ts",
-  "title": "erd",
-  "outfilepath": "doc/erd.md"
+  "title": "ERD",
+  "outfilepath": "docs/erd.md"
 }
 ```
 
-### mysql/mariadb
+### MySQL/MariaDB
 
-- **type**: database type (required)
-- **host**: database host (required)
-- **port**: database port (required)
-- **username**: database user name (required)
-- **password**: database password (required)
-- **database**: database name (required)
-- **entitypath**: typeorm entity path (required)
-- **outfilepath**: output file path (optional, default: docs/erd.md)
-- **title**: markdown title (optional, default: erd)
+- **type**: Database type (required)
+- **host**: Database host (required)
+- **port**: Database port (required)
+- **username**: Database user name (required)
+- **password**: Database password (required)
+- **database**: Database name (required)
+- **entitypath**: TypeORM entity path (required)
+- **outfilepath**: Output file path (optional, default: docs/erd.md)
+- **title**: Markdown title (optional, default: ERD)
 
 ```json
 {
@@ -182,25 +201,25 @@ export class User {
   "password": "your_password",
   "database": "your_database",
   "entitypath": "src/database/entities/*.entity.ts",
-  "title": "erd",
-  "outfilepath": "doc/erd.md"
+  "title": "ERD",
+  "outfilepath": "docs/erd.md"
 }
 ```
 
-### sqlite
+### SQLite
 
-- **type**: database type (required)
-- **database**: path to your database file (required)
-- **entitypath**: typeorm entity path (required)
-- **outfilepath**: output file path (optional, default: docs/erd.md)
-- **title**: markdown title (optional, default: erd)
+- **type**: Database type (required)
+- **database**: Path to your database file (required)
+- **entitypath**: TypeORM entity path (required)
+- **outfilepath**: Output file path (optional, default: docs/erd.md)
+- **title**: Markdown title (optional, default: ERD)
 
 ```json
 {
   "type": "sqlite",
   "database": "path/to/your_database.sqlite",
   "entitypath": "src/database/entities/*.entity.ts",
-  "title": "erd",
-  "outfilepath": "doc/erd.md"
+  "title": "ERD",
+  "outfilepath": "docs/erd.md"
 }
 ```

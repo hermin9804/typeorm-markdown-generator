@@ -7,6 +7,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Post } from './post.entity';
+import { User } from './user.entity';
 
 /**
  * Comment entity represents a comment on a post in the application.
@@ -26,8 +27,23 @@ export class Comment {
   @Column()
   content!: string;
 
+  /**
+   * Post ID to which the comment belongs.
+   */
   @Column()
   postId!: number;
+
+  /**
+   * parent comment id of the current comment.
+   */
+  @Column({ nullable: true })
+  parentId!: number | null;
+
+  /**
+   * User ID who created the comment.
+   */
+  @Column()
+  userId!: number;
 
   /**
    * Post to which the comment belongs.
@@ -36,13 +52,11 @@ export class Comment {
   @JoinColumn({ name: 'postId' })
   post!: Post;
 
-  @Column()
-  parentId!: number;
-
   /**
    * Parent comment of the current comment.
    */
   @ManyToOne(() => Comment, (comment) => comment.replies, { nullable: true })
+  @JoinColumn({ name: 'parentId' })
   parent!: Comment | null;
 
   /**
@@ -50,4 +64,11 @@ export class Comment {
    */
   @OneToMany(() => Comment, (comment) => comment.parent)
   replies!: Comment[];
+
+  /**
+   * User who created the comment.
+   */
+  @ManyToOne(() => User, (user) => user.comments)
+  @JoinColumn({ name: 'userId' })
+  user!: User;
 }

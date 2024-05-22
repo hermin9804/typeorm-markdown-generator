@@ -9,6 +9,7 @@
 
 
 - [Post](#post)
+- [ShoppingMall](#shoppingmall)
 - [User](#user)
 
 
@@ -21,6 +22,7 @@ erDiagram
     character_varying content
     integer postId FK
     integer parentId FK
+    integer userId FK
   }
   category {
     integer id PK
@@ -33,8 +35,15 @@ erDiagram
     integer categoryId FK
     integer userId FK
   }
+  user {
+    integer id PK
+    character_varying username
+    character_varying email
+  }
   comment }|--|| post: post
   comment }|--|| comment: parent
+  comment }|--|| user: user
+  post }|--|| user: user
   post }|--|| category: category
 ```
 
@@ -59,11 +68,13 @@ Comment entity represents a comment on a post in the application.
 
   - `id`: Primary key for the comment.
   - `content`: Content of the comment.
-  - `postId`: 
+  - `postId`: Post ID to which the comment belongs.
+  - `parentId`: parent comment id of the current comment.
+  - `userId`: User ID who created the comment.
   - `post`: Post to which the comment belongs.
-  - `parentId`: 
   - `parent`: Parent comment of the current comment.
   - `replies`: Replies to the current comment.
+  - `user`: User who created the comment.
 
 
 ### post
@@ -76,10 +87,121 @@ Post entity represents a post in the application.
   - `id`: Primary key for the post.
   - `title`: Title of the post.
   - `content`: Content of the post.
-  - `user`: User who created the post.
-  - `comments`: Comments on the post.
   - `categoryId`: Category ID of the post.
+  - `userId`: User ID who created the post.
+  - `user`: User who created the post.
   - `category`: Category of the post.
+  - `comments`: Comments on the post.
+
+
+### user
+
+User entity represents a user in the application.
+@namespace User
+@namespace Post
+@namespace ShoppingMall
+
+**Properties**
+
+  - `id`: Primary key for the user.
+  - `username`: Username of the user.
+  - `email`: Email of the user.
+  - `posts`: List of posts created by the user.
+  - `profile`: Profile associated with the user.
+  - `orders`: Orders placed by the user.
+  - `comments`: Comments made by the user.
+
+
+## ShoppingMall
+
+```mermaid
+erDiagram
+  product {
+    integer id PK
+    character_varying name
+    character_varying description
+    numeric price
+  }
+  order_item {
+    integer id PK
+    integer quantity
+    integer orderId FK
+    integer productId FK
+  }
+  order {
+    integer id PK
+    integer userId FK
+    timestamp_without_time_zone orderDate
+  }
+  user {
+    integer id PK
+    character_varying username
+    character_varying email
+  }
+  order_item }|--|| order: order
+  order_item }|--|| product: product
+  order }|--|| user: user
+```
+
+### order_item
+
+OrderItem entity represents an item in an order in the shopping mall.
+@namespace ShoppingMall
+
+**Properties**
+
+  - `id`: Primary key for the order item.
+  - `quantity`: Quantity of the product in the order.
+  - `orderId`: Order ID to which the item belongs.
+  - `productId`: Product ID in the order item.
+  - `order`: Order to which this item belongs.
+  - `product`: Product in the order item.
+
+
+### order
+
+Order entity represents an order in the shopping mall.
+@namespace ShoppingMall
+
+**Properties**
+
+  - `id`: Primary key for the order.
+  - `userId`: User ID who placed the order.
+  - `orderDate`: Date the order was placed.
+  - `user`: User who placed the order.
+  - `orderItems`: List of order items in the order.
+
+
+### product
+
+Product entity represents a product in the shopping mall.
+@namespace ShoppingMall
+
+**Properties**
+
+  - `id`: Primary key for the product.
+  - `name`: Name of the product.
+  - `description`: Description of the product.
+  - `price`: Price of the product.
+  - `orderItems`: List of orders that include this product.
+
+
+### user
+
+User entity represents a user in the application.
+@namespace User
+@namespace Post
+@namespace ShoppingMall
+
+**Properties**
+
+  - `id`: Primary key for the user.
+  - `username`: Username of the user.
+  - `email`: Email of the user.
+  - `posts`: List of posts created by the user.
+  - `profile`: Profile associated with the user.
+  - `orders`: Orders placed by the user.
+  - `comments`: Comments made by the user.
 
 
 ## User
@@ -108,6 +230,7 @@ Profile entity represents additional user details.
 
   - `id`: Primary key for the profile.
   - `bio`: Biography of the user.
+  - `userId`: 
   - `user`: User associated with this profile.
 
 
@@ -115,6 +238,8 @@ Profile entity represents additional user details.
 
 User entity represents a user in the application.
 @namespace User
+@namespace Post
+@namespace ShoppingMall
 
 **Properties**
 
@@ -123,4 +248,6 @@ User entity represents a user in the application.
   - `email`: Email of the user.
   - `posts`: List of posts created by the user.
   - `profile`: Profile associated with the user.
+  - `orders`: Orders placed by the user.
+  - `comments`: Comments made by the user.
 

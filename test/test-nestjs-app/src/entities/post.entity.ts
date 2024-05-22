@@ -35,22 +35,23 @@ export class Post {
   content!: string;
 
   /**
-   * User who created the post.
-   */
-  @ManyToOne(() => User, (user) => user.posts)
-  user!: User;
-
-  /**
-   * Comments on the post.
-   */
-  @OneToMany(() => Comment, (comment) => comment.post)
-  comments!: Comment[];
-
-  /**
    * Category ID of the post.
    */
   @Column()
   categoryId!: number;
+
+  /**
+   * User ID who created the post.
+   */
+  @Column()
+  userId!: number;
+
+  /**
+   * User who created the post.
+   */
+  @ManyToOne(() => User, (user) => user.posts)
+  @JoinColumn({ name: 'userId' })
+  user!: User;
 
   /**
    * Category of the post.
@@ -58,4 +59,10 @@ export class Post {
   @ManyToOne(() => Category, (category) => category.posts)
   @JoinColumn({ name: 'categoryId' })
   category!: Category;
+
+  /**
+   * Comments on the post.
+   */
+  @OneToMany(() => Comment, (comment) => comment.post)
+  comments!: Comment[];
 }
