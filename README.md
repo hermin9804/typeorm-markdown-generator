@@ -49,9 +49,9 @@ By default, the TypeORM Markdown Generator looks for a configuration file named 
 - **username**: Database user name (required)
 - **password**: Database password (required)
 - **database**: Database name (required)
-- **entitypath**: TypeORM entity path (required)
-- **outfilepath**: Output file path (optional, default: docs/erd.md)
+- **entityPath**: TypeORM entity path (required)
 - **title**: Markdown title (optional, default: ERD)
+- **outFilePath**: Output file path (optional, default: docs/erd.md)
 
 ```json
 {
@@ -61,9 +61,9 @@ By default, the TypeORM Markdown Generator looks for a configuration file named 
   "username": "your_username",
   "password": "your_password",
   "database": "your_database",
-  "entitypath": "src/database/entities/*.entity.ts",
+  "entityPath": "src/database/entities/*.entity.ts",
   "title": "ERD",
-  "outfilepath": "docs/erd.md"
+  "outFilePath": "docs/erd.md"
 }
 ```
 
@@ -170,9 +170,9 @@ export class User {
 - **username**: Database user name (required)
 - **password**: Database password (required)
 - **database**: Database name (required)
-- **entitypath**: TypeORM entity path (required)
-- **outfilepath**: Output file path (optional, default: docs/erd.md)
+- **entityPath**: TypeORM entity path (required)
 - **title**: Markdown title (optional, default: ERD)
+- **outFilePath**: Output file path (optional, default: docs/erd.md)
 
 ```json
 {
@@ -182,9 +182,9 @@ export class User {
   "username": "your_username",
   "password": "your_password",
   "database": "your_database",
-  "entitypath": "src/database/entities/*.entity.ts",
+  "entityPath": "src/database/entities/*.entity.ts",
   "title": "ERD",
-  "outfilepath": "docs/erd.md"
+  "outFilePath": "docs/erd.md"
 }
 ```
 
@@ -196,9 +196,9 @@ export class User {
 - **username**: Database user name (required)
 - **password**: Database password (required)
 - **database**: Database name (required)
-- **entitypath**: TypeORM entity path (required)
-- **outfilepath**: Output file path (optional, default: docs/erd.md)
+- **entityPath**: TypeORM entity path (required)
 - **title**: Markdown title (optional, default: ERD)
+- **outFilePath**: Output file path (optional, default: docs/erd.md)
 
 ```json
 {
@@ -208,9 +208,9 @@ export class User {
   "username": "your_username",
   "password": "your_password",
   "database": "your_database",
-  "entitypath": "src/database/entities/*.entity.ts",
+  "entityPath": "src/database/entities/*.entity.ts",
   "title": "ERD",
-  "outfilepath": "docs/erd.md"
+  "outFilePath": "docs/erd.md"
 }
 ```
 
@@ -218,16 +218,16 @@ export class User {
 
 - **type**: Database type (required)
 - **database**: Path to your database file (required)
-- **entitypath**: TypeORM entity path (required)
-- **outfilepath**: Output file path (optional, default: docs/erd.md)
+- **entityPath**: TypeORM entity path (required)
+- **outFilePath**: Output file path (optional, default: docs/erd.md)
 - **title**: Markdown title (optional, default: ERD)
 
 ```json
 {
   "type": "sqlite",
   "database": "path/to/your_database.sqlite",
-  "entitypath": "src/database/entities/*.entity.ts",
+  "entityPath": "src/database/entities/*.entity.ts",
   "title": "ERD",
-  "outfilepath": "docs/erd.md"
+  "outFilePath": "docs/erd.md"
 }
 ```
