@@ -14,7 +14,7 @@ export class MarkdownWriter {
 
   public render(
     title: string = "ERD",
-    outFilePath: string = "ERD.md",
+    outFilePath: string = "docs/ERD.md",
     namespaces: INamespace[]
   ) {
     this.lines = [];
