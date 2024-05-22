@@ -4,17 +4,16 @@ import {
   Column,
   OneToMany,
   OneToOne,
-  CreateDateColumn,
-} from "typeorm";
-import { Post } from "./post.entity";
-import { Profile } from "./profile.entity";
+} from 'typeorm';
+import { Post } from './post.entity';
+import { Profile } from './profile.entity';
 
 /**
  * User entity represents a user in the application.
  * @namespace User
  */
-@Entity("user")
-export class UserEntity {
+@Entity()
+export class User {
   /**
    * Primary key for the user.
    */
@@ -44,7 +43,4 @@ export class UserEntity {
    */
   @OneToOne(() => Profile, (profile) => profile.user)
   profile!: Profile;
-
-  @CreateDateColumn()
-  createdAt!: Date;
 }

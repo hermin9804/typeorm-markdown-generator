@@ -5,8 +5,8 @@ import {
   ManyToOne,
   OneToMany,
   JoinColumn,
-} from "typeorm";
-import { Post } from "./post.entity";
+} from 'typeorm';
+import { Post } from './post.entity';
 
 /**
  * Comment entity represents a comment on a post in the application.
@@ -33,7 +33,7 @@ export class Comment {
    * Post to which the comment belongs.
    */
   @ManyToOne(() => Post, (post) => post.comments)
-  @JoinColumn({ name: "postId" })
+  @JoinColumn({ name: 'postId' })
   post!: Post;
 
   @Column()

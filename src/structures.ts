@@ -71,10 +71,7 @@ export type ITypeormMarkdownConfig = TDataSourceOptions & {
 type TDataSourceOptions =
   | MySQLDataSourceOptions
   | PostgreSQLDataSourceOptions
-  | SQLiteDataSourceOptions
-  | OracleDataSourceOptions
-  | MSSQLDataSourceOptions
-  | MongoDBDataSourceOptions;
+  | SQLiteDataSourceOptions;
 
 interface MySQLDataSourceOptions {
   readonly type: "mysql" | "mariadb";
@@ -97,33 +94,4 @@ interface PostgreSQLDataSourceOptions {
 interface SQLiteDataSourceOptions {
   readonly type: "sqlite";
   readonly database: string;
-}
-
-interface OracleDataSourceOptions {
-  readonly type: "oracle";
-  readonly host: string;
-  readonly port: number;
-  readonly username: string;
-  readonly password: string;
-  readonly database: string;
-}
-
-interface MSSQLDataSourceOptions {
-  readonly type: "mssql";
-  readonly host: string;
-  readonly port: number;
-  readonly username: string;
-  readonly password: string;
-  readonly database: string;
-}
-
-interface MongoDBDataSourceOptions {
-  readonly type: "mongodb";
-  readonly host: string;
-  readonly port: number;
-  readonly username: string;
-  readonly password: string;
-  readonly database: string;
-  readonly useNewUrlParser: boolean;
-  readonly useUnifiedTopology: boolean;
 }

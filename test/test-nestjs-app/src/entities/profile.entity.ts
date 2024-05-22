@@ -4,8 +4,8 @@ import {
   Column,
   OneToOne,
   JoinColumn,
-} from "typeorm";
-import { UserEntity } from "./user.entity";
+} from 'typeorm';
+import { User } from './user.entity';
 
 /**
  * Profile entity represents additional user details.
@@ -28,7 +28,7 @@ export class Profile {
   /**
    * User associated with this profile.
    */
-  @OneToOne(() => UserEntity)
+  @OneToOne(() => User)
   @JoinColumn()
-  user!: UserEntity;
+  user!: User;
 }

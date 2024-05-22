@@ -29,33 +29,28 @@ export class EntityMetadataAnalyzer {
   }
 
   public async analyze(): Promise<ITable[]> {
-    try {
-      await this.initialize();
-      const connectionMetadataBuilder = new ConnectionMetadataBuilder(
-        this.dataSource
+    await this.initialize();
+    const connectionMetadataBuilder = new ConnectionMetadataBuilder(
+      this.dataSource
+    );
+
+    const { entities } = this.dataSource.options;
+    const TEntities = entities as (Function | EntitySchema<any> | string)[];
+
+    let entityMetadatas: EntityMetadata[];
+
+    if (entities) {
+      entityMetadatas = await connectionMetadataBuilder.buildEntityMetadatas(
+        TEntities
       );
-
-      const { entities } = this.dataSource.options;
-      const TEntities = entities as (Function | EntitySchema<any> | string)[];
-
-      let entityMetadatas: EntityMetadata[];
-
-      if (entities) {
-        entityMetadatas = await connectionMetadataBuilder.buildEntityMetadatas(
-          TEntities
-        );
-      } else {
-        throw Error("No entities found on connection");
-      }
-
-      const tables = this.mapTables(entityMetadatas);
-
-      await this.destroy();
-      return tables;
-    } catch (error) {
-      console.error("Error analyzing entity metadata:", error);
-      throw error;
+    } else {
+      throw Error("No entities found on connection");
     }
+
+    const tables = this.mapTables(entityMetadatas);
+
+    await this.destroy();
+    return tables;
   }
 
   private mapTables(entityMetadatas: EntityMetadata[]): ITable[] {

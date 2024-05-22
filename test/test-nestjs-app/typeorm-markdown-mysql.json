@@ -1,0 +1,11 @@
+{
+  "type": "mysql",
+  "host": "localhost",
+  "port": 3306,
+  "username": "your_username",
+  "password": "your_password",
+  "database": "your_database",
+  "entityPath": "src/entities/*.entity.ts",
+  "title": "mysql-erd",
+  "outFilePath": "docs/mysql-erd.md"
+}

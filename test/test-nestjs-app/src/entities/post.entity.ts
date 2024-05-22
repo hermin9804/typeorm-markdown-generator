@@ -5,15 +5,14 @@ import {
   ManyToOne,
   OneToMany,
   JoinColumn,
-} from "typeorm";
-import { UserEntity } from "./user.entity";
-import { Comment } from "./comment.entity";
-import { Category } from "./category.entity";
+} from 'typeorm';
+import { User } from './user.entity';
+import { Comment } from './comment.entity';
+import { Category } from './category.entity';
 
 /**
  * Post entity represents a post in the application.
  * @namespace Post
- * @namespace User
  */
 @Entity()
 export class Post {
@@ -38,8 +37,8 @@ export class Post {
   /**
    * User who created the post.
    */
-  @ManyToOne(() => UserEntity, (user) => user.posts)
-  user!: UserEntity;
+  @ManyToOne(() => User, (user) => user.posts)
+  user!: User;
 
   /**
    * Comments on the post.
@@ -57,6 +56,6 @@ export class Post {
    * Category of the post.
    */
   @ManyToOne(() => Category, (category) => category.posts)
-  @JoinColumn({ name: "categoryId" })
+  @JoinColumn({ name: 'categoryId' })
   category!: Category;
 }

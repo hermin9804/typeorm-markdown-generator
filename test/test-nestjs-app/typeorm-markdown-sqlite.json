@@ -1,0 +1,7 @@
+{
+  "type": "sqlite",
+  "database": "database.sqlite",
+  "entityPath": "src/entities/*.entity.ts",
+  "title": "sqlite-erd",
+  "outFilePath": "docs/sqlite-erd.md"
+}
