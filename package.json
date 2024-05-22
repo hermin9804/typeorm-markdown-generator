@@ -6,14 +6,10 @@
     "type": "git",
     "url": "https://github.com/hermin9804/typeorm-markdown-generator"
   },
-  "bin": {
-    "typeorm-markdown": "./dist/commands/typeorm-markdown.js"
-  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js",
+    "build": "rimraf dist && tsc",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -30,7 +26,6 @@
   },
   "devDependencies": {
     "@types/node": "^20.12.12",
-    "sqlite3": "^5.1.7",
     "typescript": "^5.4.2"
   }
 }

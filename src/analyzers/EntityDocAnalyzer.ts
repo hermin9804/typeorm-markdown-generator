@@ -2,15 +2,9 @@ import { ClassDeclaration, Project, ts } from "ts-morph";
 import { IClassDoc } from "../structures";
 
 export class EntityDocAnalyzer {
-  private sourceFilePath: string;
-
-  constructor(sourceFilePath: string) {
-    this.sourceFilePath = sourceFilePath;
-  }
-
-  public async analyze(): Promise<IClassDoc[]> {
+  public async analyze(sourceFilePath: string): Promise<IClassDoc[]> {
     const result: IClassDoc[] = [];
-    const project = await this.loadProject();
+    const project = await this.loadProject(sourceFilePath);
     const sourceFiles = project.getSourceFiles();
     sourceFiles.forEach((sourceFile) => {
       sourceFile.getClasses().forEach((cls) => {
@@ -20,9 +14,9 @@ export class EntityDocAnalyzer {
     return result;
   }
 
-  private async loadProject(): Promise<Project> {
+  private async loadProject(sourceFilePath: string): Promise<Project> {
     const project = new Project();
-    project.addSourceFilesAtPaths(this.sourceFilePath);
+    project.addSourceFilesAtPaths(sourceFilePath);
     if (project.getSourceFiles().length === 0) {
       throw new Error("No source files found.");
     }
