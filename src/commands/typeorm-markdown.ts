@@ -18,7 +18,8 @@ program
   .parse(process.argv);
 
 const options = program.opts();
-const configPath = path.resolve(process.cwd(), options.config);
+const processCwd = process.cwd();
+const configPath = path.resolve(processCwd, options.config);
 
 // Ensure the config file exists
 if (!fs.existsSync(configPath)) {
@@ -43,9 +44,14 @@ if (!validateConfig(config)) {
   process.exit(1);
 }
 
+const entityPathFromRoot = `${processCwd}/${config.entityPath}`;
+
 const main = async () => {
   try {
-    const typeormMarkdown = new TypeormMarkdownGenerator(config, configPath);
+    const typeormMarkdown = new TypeormMarkdownGenerator(
+      config,
+      entityPathFromRoot
+    );
     await typeormMarkdown.build();
     console.log("Document generated successfully.");
   } catch (error) {

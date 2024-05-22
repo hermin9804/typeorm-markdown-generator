@@ -13,11 +13,9 @@ export class TypeormMarkdownGenerator {
   private readonly namespaceFactory: NamespaceFactory;
   private readonly markdownWriter: MarkdownWriter;
 
-  constructor(config: ITypeormMarkdownConfig, configPath: string) {
+  constructor(config: ITypeormMarkdownConfig, entityPathFromRoot: string) {
     this.config = config;
-    this.entityPathFromRoot = `${path.dirname(configPath)}/${
-      config.entityPath
-    }`;
+    this.entityPathFromRoot = entityPathFromRoot;
     this.entityMetadataAnalyzer = new EntityMetadataAnalyzer(config);
     this.entityDocAnalyzer = new EntityDocAnalyzer(this.entityPathFromRoot);
     this.namespaceFactory = new NamespaceFactory();
