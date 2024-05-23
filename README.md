@@ -23,7 +23,9 @@ The TypeORM Markdown Generator creates markdown documentation for TypeORM entiti
 
 ## Example Output
 
-- [Example Output](https://github.com/hermin9804/typeorm-markdown/blob/main/erd.md)
+- [with posgres](https://github.com/hermin9804/typeorm-markdown-generator/blob/main/test/test-nestjs-app/docs/postgres-erd.md)
+- [with mysql](https://github.com/hermin9804/typeorm-markdown-generator/blob/main/test/test-nestjs-app/docs/mysql-erd.md)
+- [with sqlite](https://github.com/hermin9804/typeorm-markdown-generator/blob/main/test/test-nestjs-app/docs/sqlite-erd.md)
 
 ## Setup
 
