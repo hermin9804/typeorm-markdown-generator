@@ -24,11 +24,6 @@ erDiagram
     int parentId FK
     int userId FK
   }
-  user {
-    int id PK
-    varchar username
-    varchar email
-  }
   category {
     int id PK
     varchar name
@@ -39,6 +34,11 @@ erDiagram
     varchar content
     int categoryId FK
     int userId FK
+  }
+  user {
+    int id PK
+    varchar username
+    varchar email
   }
   comment }|--|| post: post
   comment }|--|| comment: parent

@@ -24,11 +24,6 @@ erDiagram
     integer parentId FK
     integer userId FK
   }
-  user {
-    integer id PK
-    character_varying username
-    character_varying email
-  }
   category {
     integer id PK
     character_varying name
@@ -39,6 +34,11 @@ erDiagram
     character_varying content
     integer categoryId FK
     integer userId FK
+  }
+  user {
+    integer id PK
+    character_varying username
+    character_varying email
   }
   comment }|--|| post: post
   comment }|--|| comment: parent
