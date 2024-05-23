@@ -46,6 +46,7 @@ Create `src/generate-erd.ts` file:
 import { DataSource } from "typeorm";
 import { TypeormMarkdownGenerator } from "typeorm-markdown-generator";
 
+// Enter your TypeORM database configuration here.
 const appDataSource = new DataSource({
   type: "postgres",
   host: "localhost",
@@ -55,7 +56,7 @@ const appDataSource = new DataSource({
   database: "your_database",
   // entities: [User, PostComment, Post, Category, Profile], or
   entities: [__dirname + "/entities/*.entity{.ts,.js}"],
-}); // Enter your TypeORM database configuration here.
+});
 
 const generateErd = async () => {
   try {
