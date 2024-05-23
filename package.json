@@ -20,7 +20,6 @@
   "author": "hermin",
   "license": "MIT",
   "dependencies": {
-    "commander": "^12.1.0",
     "ts-morph": "^22.0.0",
     "typeorm": "^0.3.20"
   },
