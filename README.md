@@ -2,14 +2,12 @@
 
 ## Table of Contents
 
-1. [Overview](#overview)
-2. [Features](#features)
-3. [Example Output](#example-output)
-4. [Setup](#setup)
-5. [Custom Configuration File Path](#custom-configuration-file-path)
-6. [Entity Naming Rule](#entity-naming-rule)
-7. [Comment Tags](#comment-tags)
-8. [Configuration Examples for Other Databases](#configuration-examples-for-other-databases)
+- [Overview](#overview)
+- [Features](#features)
+- [Example Output](#example-output)
+- [Setup](#setup)
+- [Entity Naming Rule](#entity-naming-rule)
+- [Comment Tags](#comment-tags)
 
 ## Overview
 
@@ -29,68 +27,65 @@ The TypeORM Markdown Generator creates markdown documentation for TypeORM entiti
 
 ## Setup
 
-To set up and use the TypeORM Markdown Documents Generator, follow these steps:
-
 ### Install Dependencies
 
-```sh
-npm i -D typeorm-markdown-generator
+To set up and use the TypeORM Markdown Documents Generator, follow these steps:
+
+```shell
+npm install --save-dev typeorm-markdown-generator
 ```
 
 ### Configuration
 
-By default, the TypeORM Markdown Generator looks for a configuration file named `typeorm-markdown.json` in the root of your project. Below is an example configuration for PostgreSQL:
+Create `src/generate-erd.ts` file:
 
-### PostgreSQL
+```ts
+// src/generate-erd.ts
+import { DataSource } from "typeorm";
+import { TypeormMarkdownGenerator } from "typeorm-markdown-generator";
 
-- **type**: Database type (required)
-- **host**: Database host (required)
-- **port**: Database port (required)
-- **username**: Database user name (required)
-- **password**: Database password (required)
-- **database**: Database name (required)
-- **entityPath**: TypeORM entity path (required)
-- **title**: Markdown title (optional, default: ERD)
-- **outFilePath**: Output file path (optional, default: docs/erd.md)
+const appDataSource = new DataSource({
+  type: "postgres",
+  host: "localhost",
+  port: 5432,
+  username: "your_username",
+  password: "your_password",
+  database: "your_database",
+  entities: [__dirname + "/entities/*.entity{.ts,.js}"],
+}); // Enter your TypeORM database configuration here.
 
-```json
-{
-  "type": "postgres",
-  "host": "localhost",
-  "port": 5432,
-  "username": "your_username",
-  "password": "your_password",
-  "database": "your_database",
-  "entityPath": "src/database/entities/*.entity.ts",
-  "title": "ERD",
-  "outFilePath": "docs/erd.md"
-}
+const generateErd = async () => {
+  try {
+    const typeormMarkdown = new TypeormMarkdownGenerator(appDataSource, {
+      // Path to your entity files, starting from the project root.
+      entityPath: "src/entities/**/*.ts",
+      // Title of the document.
+      title: "Postgres TypeORM Markdown",
+      // Path to save the document, starting from the project root.
+      outFilePath: "docs/postgres-erd.md",
+    });
+    await typeormMarkdown.build();
+    console.log("Document generated successfully.");
+  } catch (error) {
+    console.error("Error generating document:", error);
+  }
+};
+
+generateErd();
 ```
 
-For configuration examples for other databases, see [Configuration Examples for Other Databases](#configuration-examples-for-other-databases).
+Note: The `TypeormMarkdownGenerator` internally sets the project root path to the location of the `package.json` file.
+
+### Compile
+
+```sh
+tsc
+```
 
 ### Run
 
 ```sh
-npx typeorm-markdown
-```
-
-## Custom Configuration File Path
-
-By default, the TypeORM Markdown Generator looks for a configuration file named `typeorm-markdown.json` in the root of your project. However, you can specify a custom configuration file path using the `-c` or `--config` option when running the generator. This is useful if you have multiple configurations or prefer a different file name.
-
-### Usage
-
-To use a custom configuration file, pass the `-c` or `--config` option followed by the path to your configuration file.
-
-```sh
-npx typeorm-markdown -c path/to/your_custom_config.json
-```
-
-### Example
-
-```sh
-npx typeorm-markdown -c configs/typeorm-custom-config.json
+node dist/generate-erd.js
 ```
 
 ## Entity Naming Rule
@@ -157,77 +152,5 @@ export class User {
    */
   @OneToOne(() => Profile, (profile) => profile.user)
   profile!: Profile;
-}
-```
-
-## Configuration Examples for Other Databases
-
-### PostgreSQL
-
-- **type**: Database type (required)
-- **host**: Database host (required)
-- **port**: Database port (required)
-- **username**: Database user name (required)
-- **password**: Database password (required)
-- **database**: Database name (required)
-- **entityPath**: TypeORM entity path (required)
-- **title**: Markdown title (optional, default: ERD)
-- **outFilePath**: Output file path (optional, default: docs/erd.md)
-
-```json
-{
-  "type": "postgres",
-  "host": "localhost",
-  "port": 5432,
-  "username": "your_username",
-  "password": "your_password",
-  "database": "your_database",
-  "entityPath": "src/database/entities/*.entity.ts",
-  "title": "ERD",
-  "outFilePath": "docs/erd.md"
-}
-```
-
-### MySQL/MariaDB
-
-- **type**: Database type (required)
-- **host**: Database host (required)
-- **port**: Database port (required)
-- **username**: Database user name (required)
-- **password**: Database password (required)
-- **database**: Database name (required)
-- **entityPath**: TypeORM entity path (required)
-- **title**: Markdown title (optional, default: ERD)
-- **outFilePath**: Output file path (optional, default: docs/erd.md)
-
-```json
-{
-  "type": "mysql",
-  "host": "localhost",
-  "port": 3306,
-  "username": "your_username",
-  "password": "your_password",
-  "database": "your_database",
-  "entityPath": "src/database/entities/*.entity.ts",
-  "title": "ERD",
-  "outFilePath": "docs/erd.md"
-}
-```
-
-### SQLite
-
-- **type**: Database type (required)
-- **database**: Path to your database file (required)
-- **entityPath**: TypeORM entity path (required)
-- **outFilePath**: Output file path (optional, default: docs/erd.md)
-- **title**: Markdown title (optional, default: ERD)
-
-```json
-{
-  "type": "sqlite",
-  "database": "path/to/your_database.sqlite",
-  "entityPath": "src/database/entities/*.entity.ts",
-  "title": "ERD",
-  "outFilePath": "docs/erd.md"
 }
 ```
