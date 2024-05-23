@@ -53,6 +53,7 @@ const appDataSource = new DataSource({
   username: "your_username",
   password: "your_password",
   database: "your_database",
+  // entities: [User, PostComment, Post, Category, Profile], or
   entities: [__dirname + "/entities/*.entity{.ts,.js}"],
 }); // Enter your TypeORM database configuration here.
 
