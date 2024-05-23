@@ -13,14 +13,6 @@ export class TypeormMarkdownGenerator {
   private readonly namespaceFactory: NamespaceFactory;
   private readonly markdownWriter: MarkdownWriter;
 
-  // constructor(config: ITypeormMarkdownConfig) {
-  //   this.config = config;
-  //   this.entityMetadataAnalyzer = new EntityMetadataAnalyzer(config);
-  //   this.entityDocAnalyzer = new EntityDocAnalyzer();
-  //   this.namespaceFactory = new NamespaceFactory();
-  //   this.markdownWriter = new MarkdownWriter();
-  // }
-
   constructor(datasource: DataSource, markdownConfig: ITypeormMarkdownConfig) {
     this.markdownConfig = markdownConfig;
     this.entityMetadataAnalyzer = new EntityMetadataAnalyzer(datasource);

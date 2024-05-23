@@ -1,34 +1,20 @@
 import { DataSource, EntityMetadata, EntitySchema } from "typeorm";
 import { ConnectionMetadataBuilder } from "typeorm/connection/ConnectionMetadataBuilder";
 import { RelationMetadata } from "typeorm/metadata/RelationMetadata";
-import {
-  IColumn,
-  IRelation,
-  ITable,
-  ITypeormMarkdownConfig,
-} from "../structures";
+import { IColumn, IRelation, ITable } from "../structures";
 
 export class EntityMetadataAnalyzer {
   private dataSource: DataSource;
-
-  // constructor(config: ITypeormMarkdownConfig) {
-  //   this.dataSource = new DataSource({
-  //     ...config,
-  //     entities: [config.entityPath],
-  //   });
-  // }
 
   constructor(dataSource: DataSource) {
     this.dataSource = dataSource;
   }
 
   private async initialize() {
-    // Initialize the connection
     await this.dataSource.initialize();
   }
 
   private async destroy() {
-    // Destroy the connection
     await this.dataSource.destroy();
   }
 
@@ -37,12 +23,9 @@ export class EntityMetadataAnalyzer {
     const connectionMetadataBuilder = new ConnectionMetadataBuilder(
       this.dataSource
     );
-
     const { entities } = this.dataSource.options;
     const TEntities = entities as (Function | EntitySchema<any> | string)[];
-
     let entityMetadatas: EntityMetadata[];
-
     if (entities) {
       entityMetadatas = await connectionMetadataBuilder.buildEntityMetadatas(
         TEntities
@@ -50,9 +33,7 @@ export class EntityMetadataAnalyzer {
     } else {
       throw Error("No entities found on connection");
     }
-
     const tables = this.mapTables(entityMetadatas);
-
     await this.destroy();
     return tables;
   }
@@ -65,11 +46,9 @@ export class EntityMetadataAnalyzer {
         isPrimary: column.isPrimary,
         isForeignKey: !!column.referencedColumn,
       }));
-
       const relations: IRelation[] = entity.relations.map((rel) =>
         this.resolveRelation(entity, rel)
       );
-
       return {
         name: entity.tableName,
         columns,

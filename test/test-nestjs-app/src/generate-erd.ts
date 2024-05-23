@@ -1,19 +1,43 @@
-import { TypeormMarkdownGenerator } from '../../../src/TypeormMarkdownGenerator';
+import { TypeormMarkdownGenerator } from 'typeorm-markdown-generator';
+import { DataSource } from 'typeorm';
+import { mysqlConfig, postgresConfig } from './typeorm-config';
 
-const main = async () => {
-  try {
-    const typeormMarkdown = new TypeormMarkdownGenerator({
-      type: 'sqlite',
-      database: 'db.sqlite',
-      entityPath: 'src/entities/**/*.ts',
-      title: 'TypeORM Markdown',
-      outFilePath: 'docs/database.md',
-    });
-    await typeormMarkdown.build();
-    console.log('Document generated successfully.');
-  } catch (error) {
-    console.error('Error generating document:', error);
-  }
+const generateErdPostgres = async () => {
+  const appDataSources = new DataSource(postgresConfig);
+
+  const typeormMarkdown = new TypeormMarkdownGenerator(appDataSources, {
+    entityPath: 'src/entities/**/*.ts',
+    title: 'postgres TypeORM Markdown',
+    outFilePath: 'docs/postgres-erd.md',
+  });
+  await typeormMarkdown.build();
+  console.log('Posgres Document generated successfully.');
 };
 
-main();
+const generateErdMysql = async () => {
+  const appDataSources = new DataSource(mysqlConfig);
+
+  const typeormMarkdown = new TypeormMarkdownGenerator(appDataSources, {
+    entityPath: 'src/entities/**/*.ts',
+    title: 'mysql TypeORM Markdown',
+    outFilePath: 'docs/mysql-erd.md',
+  });
+  await typeormMarkdown.build();
+  console.log('Mysql Document generated successfully.');
+};
+
+const generateErdSqlite = async () => {
+  const appDataSources = new DataSource(postgresConfig);
+
+  const typeormMarkdown = new TypeormMarkdownGenerator(appDataSources, {
+    entityPath: 'src/entities/**/*.ts',
+    title: 'sqlite TypeORM Markdown',
+    outFilePath: 'docs/sqlite-erd.md',
+  });
+  await typeormMarkdown.build();
+  console.log('Sqlite Document generated successfully.');
+};
+
+generateErdPostgres();
+generateErdMysql();
+generateErdSqlite();
