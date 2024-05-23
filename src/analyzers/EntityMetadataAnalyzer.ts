@@ -30,6 +30,11 @@ export class EntityMetadataAnalyzer {
       entityMetadatas = await connectionMetadataBuilder.buildEntityMetadatas(
         TEntities
       );
+      if (entityMetadatas.length === 0) {
+        throw Error(
+          "No entities found on connection, check your Typeorm datasource entities or entitie path"
+        );
+      }
     } else {
       throw Error("No entities found on connection");
     }

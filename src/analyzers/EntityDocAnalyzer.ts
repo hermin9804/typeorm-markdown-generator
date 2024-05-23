@@ -18,7 +18,9 @@ export class EntityDocAnalyzer {
     const project = new Project();
     project.addSourceFilesAtPaths(sourceFilePath);
     if (project.getSourceFiles().length === 0) {
-      throw new Error("No source files found.");
+      throw new Error(
+        "No source files found, please check the typeorm-markdwon config entityPath"
+      );
     }
     return project;
   }
