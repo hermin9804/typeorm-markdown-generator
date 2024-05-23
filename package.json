@@ -1,6 +1,6 @@
 {
   "name": "typeorm-markdown-generator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A tool to generate markdown documentation from TypeORM entities",
   "repository": {
     "type": "git",
@@ -26,6 +26,13 @@
   },
   "devDependencies": {
     "@types/node": "^20.12.12",
+    "rimraf": "^3.0.2",
     "typescript": "^5.4.2"
+  },
+  "files": [
+    "dist"
+  ],
+  "bugs": {
+    "url": "https://github.com/hermin9804/typeorm-markdown-generator/issues"
   }
 }

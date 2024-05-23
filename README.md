@@ -60,7 +60,7 @@ const generateErd = async () => {
   try {
     const typeormMarkdown = new TypeormMarkdownGenerator(appDataSource, {
       // Path to your entity files, starting from the project root.
-      entityPath: "src/entities/**/*.ts",
+      entityPath: "src/entities/*.ts",
       // Title of the document.
       title: "Postgres TypeORM Markdown",
       // Path to save the document, starting from the project root.
