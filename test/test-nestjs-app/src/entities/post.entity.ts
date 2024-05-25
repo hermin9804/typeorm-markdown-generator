@@ -6,7 +6,7 @@ import {
   OneToMany,
   JoinColumn,
 } from 'typeorm';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 import { Comment } from './comment.entity';
 import { Category } from './category.entity';
 
@@ -49,9 +49,9 @@ export class Post {
   /**
    * User who created the post.
    */
-  @ManyToOne(() => User, (user) => user.posts)
+  @ManyToOne(() => UserEntity, (user) => user.posts)
   @JoinColumn({ name: 'userId' })
-  user!: User;
+  user!: UserEntity;
 
   /**
    * Category of the post.

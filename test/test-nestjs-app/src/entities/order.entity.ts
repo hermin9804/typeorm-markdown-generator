@@ -6,7 +6,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 import { OrderItem } from './order-item.entity';
 
 /**
@@ -36,9 +36,9 @@ export class Order {
   /**
    * User who placed the order.
    */
-  @ManyToOne(() => User, (user) => user.orders)
+  @ManyToOne(() => UserEntity, (user) => user.orders)
   @JoinColumn({ name: 'userId' })
-  user!: User;
+  user!: UserEntity;
 
   /**
    * List of order items in the order.

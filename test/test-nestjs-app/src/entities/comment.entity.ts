@@ -7,7 +7,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Post } from './post.entity';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 
 /**
  * Comment entity represents a comment on a post in the application.
@@ -68,7 +68,7 @@ export class Comment {
   /**
    * User who created the comment.
    */
-  @ManyToOne(() => User, (user) => user.comments)
+  @ManyToOne(() => UserEntity, (user) => user.comments)
   @JoinColumn({ name: 'userId' })
-  user!: User;
+  user!: UserEntity;
 }

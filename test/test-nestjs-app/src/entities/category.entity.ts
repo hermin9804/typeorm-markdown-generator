@@ -4,6 +4,7 @@ import { Post } from './post.entity';
 /**
  * Category entity represents a category of posts.
  * @namespace Post
+ * @test
  */
 @Entity()
 export class Category {

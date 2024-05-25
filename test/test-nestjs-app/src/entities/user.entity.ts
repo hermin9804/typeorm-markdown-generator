@@ -17,7 +17,7 @@ import { Comment } from './comment.entity';
  * @namespace ShoppingMall
  */
 @Entity()
-export class User {
+export class UserEntity {
   /**
    * Primary key for the user.
    */
