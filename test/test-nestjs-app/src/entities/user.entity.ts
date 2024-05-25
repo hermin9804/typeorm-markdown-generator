@@ -13,8 +13,8 @@ import { Comment } from './comment.entity';
 /**
  * User entity represents a user in the application.
  * @namespace User
- * @namespace Post
- * @namespace ShoppingMall
+ * @erd Post
+ * @discribe ShoppingMall
  */
 @Entity()
 export class UserEntity {

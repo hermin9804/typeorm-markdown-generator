@@ -42,15 +42,15 @@ export class EntityMetadataAnalyzer {
     return entityMetadatas.map((entity) => {
       const columns: IColumn[] = entity.columns.map((column) => ({
         type: dataSource.driver.normalizeType(column),
-        name: column.databaseName,
+        columnName: column.databaseName,
         isPrimary: column.isPrimary,
         isForeignKey: !!column.referencedColumn,
       }));
       const relations: IRelation[] = entity.relations.map((rel) =>
-        this.resolveRelation(dataSource, entity, rel)
+        this.resolveRelation(entity, rel)
       );
       return {
-        name: entity.tableName,
+        tableName: entity.tableName,
         columns,
         relations,
       };
@@ -58,7 +58,6 @@ export class EntityMetadataAnalyzer {
   }
 
   private static resolveRelation(
-    dataSource: DataSource,
     entity: EntityMetadata,
     {
       relationType,

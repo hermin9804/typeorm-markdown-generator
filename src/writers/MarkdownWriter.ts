@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { IClassDoc, INamespace } from "../structures";
+import { IClassDoc, INamespace, IPropertyDoc } from "../structures";
 import { MermaidErdWriter } from "./MermaidErdWriter";
 
 export class MarkdownWriter {
@@ -38,7 +38,9 @@ export class MarkdownWriter {
 
     namespaces.forEach((namespace) => {
       this.lines.push(
-        `- [${namespace.name}](#${namespace.name.toLowerCase()})`
+        `- [${
+          namespace.namespaceName
+        }](#${namespace.namespaceName.toLowerCase()})`
       );
     });
 
@@ -47,7 +49,7 @@ export class MarkdownWriter {
 
   private static writeBodyContent(namespaces: INamespace[]): void {
     namespaces.forEach((namespace) => {
-      this.lines.push(`## ${namespace.name}\n`);
+      this.lines.push(`## ${namespace.namespaceName}\n`);
       this.writeMermaidErd(namespace);
       namespace.classDocs.forEach((doc) => {
         this.writeDocumentContent(doc);
@@ -61,12 +63,12 @@ export class MarkdownWriter {
   }
 
   private static writeDocumentContent(doc: IClassDoc): void {
-    this.lines.push(`### ${doc.name}\n`);
+    this.lines.push(`### ${doc.className}\n`);
     this.lines.push(`${doc.docs.join(" ")}\n`);
     this.lines.push("**Properties**\n");
 
-    doc.properties.forEach((prop: any) => {
-      this.lines.push(`  - \`${prop.name}\`: ${prop.docs.join(" ")}`);
+    doc.properties.forEach((prop: IPropertyDoc) => {
+      this.lines.push(`  - \`${prop.propertyName}\`: ${prop.docs.join(" ")}`);
     });
 
     this.lines.push("\n");

@@ -2,13 +2,13 @@
  * analyzed typeorm entity metadata
  */
 export interface ITable {
-  name: string;
+  tableName: string;
   columns: IColumn[];
   relations: IRelation[];
 }
 
 export interface IColumn {
-  name: string;
+  columnName: string;
   type: string;
   isPrimary: boolean;
   isForeignKey: boolean;
@@ -27,10 +27,9 @@ export interface IRelation {
 
 /**
  * analyzed typeorm entity jsDoc
- * todo!!: tags 구별해야함.
  */
 export interface IClassDoc {
-  name: string;
+  className: string;
   docs: string[];
   namespaces: string[];
   namespaceTags: string[];
@@ -41,7 +40,7 @@ export interface IClassDoc {
 }
 
 export interface IPropertyDoc {
-  name: string;
+  propertyName: string;
   docs: string[];
   hasMinitemsTag: boolean;
 }
@@ -50,7 +49,7 @@ export interface IPropertyDoc {
  * ITable, IClassDoc 을 동일한 namespace로 묶어주는 인터페이스
  */
 export interface INamespace {
-  name: string;
+  namespaceName: string;
   tables: ITable[];
   classDocs: IClassDoc[];
 }

@@ -2,10 +2,9 @@ import { DataSource } from "typeorm";
 import { MarkdownWriter } from "./writers/MarkdownWriter";
 import { EntityDocAnalyzer } from "./analyzers/EntityDocAnalyzer";
 import { EntityMetadataAnalyzer } from "./analyzers/EntityMetadataAnalyzer";
-import { NamespaceFactory } from "./factorys/NamespaceFactory";
 import { ITypeormMarkdownConfig } from "./structures";
-import { EntitySpecFactory } from "./factorys/EntitySpecFactory";
 import { findProjectRoot } from "./utils/findProjectRoot";
+import { EntitySpecContainer } from "./services/EntitySpecContainer";
 
 export class TypeormMarkdownGenerator {
   private datasource: DataSource;
@@ -23,9 +22,9 @@ export class TypeormMarkdownGenerator {
     const tables = await EntityMetadataAnalyzer.analyze(this.datasource);
     const entityDocs = await EntityDocAnalyzer.analyze(entityPathFromRoot);
 
-    const namespaces = NamespaceFactory.create(tables, entityDocs);
-
-    const entitySpecs = EntitySpecFactory.create(tables, entityDocs);
+    const entitySpecContainer = new EntitySpecContainer(tables, entityDocs);
+    const namespaces = entitySpecContainer.createNamespcace();
+    console.log("namespaces", JSON.stringify(namespaces, null, 2));
 
     MarkdownWriter.render(
       this.markdownConfig.title,

@@ -3,8 +3,10 @@ import { ITable } from "../structures";
 const RelationShips = {
   left: {
     "one-to-many": "||",
-    "many-to-one": "}|",
-    "one-to-one": "||",
+    // "many-to-one": "}|",
+    "many-to-one": "}o",
+    // "one-to-one": "||",
+    "one-to-one": "|o",
     "many-to-many": "}|",
   },
   right: {
@@ -49,17 +51,17 @@ export class MermaidErdWriter {
     return tables
       .map((table) => {
         const columns = table.columns.map((column) => {
-          const type = column.type.replace(/ /g, "_");
-          const name = column.name;
+          const columnType = column.type.replace(/ /g, "_");
+          const columnName = column.columnName;
           const isPrimary = column.isPrimary ? "PK" : "";
           const isForeignKey = column.isForeignKey ? "FK" : "";
 
-          return [type, name, isPrimary, isForeignKey]
+          return [columnType, columnName, isPrimary, isForeignKey]
             .filter(Boolean)
             .join(" ");
         });
 
-        return `${table.name} {\n    ${columns.join("\n    ")}\n  }`;
+        return `${table.tableName} {\n    ${columns.join("\n    ")}\n  }`;
       })
       .join("\n  ");
   }

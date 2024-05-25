@@ -1,5 +1,13 @@
-import { ClassDeclaration, Project, ts } from "ts-morph";
+import { ClassDeclaration, Project, PropertyDeclaration, ts } from "ts-morph";
 import { IClassDoc } from "../structures";
+
+const TAGS = {
+  namespace: "namespace",
+  erd: "erd",
+  discribe: "discribe",
+  hidden: "hidden",
+  minitems: "minitems",
+};
 
 export class EntityDocAnalyzer {
   public static async analyze(sourceFilePath: string): Promise<IClassDoc[]> {
@@ -27,17 +35,17 @@ export class EntityDocAnalyzer {
 
   private static createEntity(cls: ClassDeclaration): IClassDoc {
     return {
-      name: this.extractEntityName(cls),
+      className: this.extractEntityName(cls),
       docs: cls.getJsDocs().map((doc) => doc.getInnerText().trim()),
       namespaces: this.extractNamespaces(cls),
-      namespaceTags: [],
-      erdTags: [],
-      discribeTags: [],
-      hasHiddenTag: false,
+      namespaceTags: this.extractNamespaces(cls),
+      erdTags: this.extractErdTags(cls),
+      discribeTags: this.extractDiscribeTags(cls),
+      hasHiddenTag: this.hasHiddenTag(cls),
       properties: cls.getProperties().map((prop) => ({
-        name: prop.getName(),
+        propertyName: prop.getName(),
         docs: prop.getJsDocs().map((doc) => doc.getInnerText().trim()),
-        hasMinitemsTag: false,
+        hasMinitemsTag: this.hasMinitemsTag(prop),
       })),
     };
   }
@@ -81,12 +89,54 @@ export class EntityDocAnalyzer {
     const result: string[] = [];
     cls.getJsDocs().forEach((doc) => {
       doc.getTags().forEach((tag) => {
-        if (tag.getTagName() === "namespace") {
+        if (tag.getTagName() === TAGS.namespace) {
           result.push(tag.getCommentText() ?? "");
         }
       });
     });
     if (result.length === 0) result.push("Default");
     return result;
+  }
+
+  private static extractErdTags(cls: ClassDeclaration): string[] {
+    const result: string[] = [];
+    cls.getJsDocs().forEach((doc) => {
+      doc.getTags().forEach((tag) => {
+        if (tag.getTagName() === TAGS.erd) {
+          result.push(tag.getCommentText() ?? "");
+        }
+      });
+    });
+    return result;
+  }
+
+  private static extractDiscribeTags(cls: ClassDeclaration): string[] {
+    const result: string[] = [];
+    cls.getJsDocs().forEach((doc) => {
+      doc.getTags().forEach((tag) => {
+        if (tag.getTagName() === TAGS.discribe) {
+          result.push(tag.getCommentText() ?? "");
+        }
+      });
+    });
+    return result;
+  }
+
+  private static hasHiddenTag(cls: ClassDeclaration): boolean {
+    const hasHiddenTag = cls
+      .getJsDocs()
+      .some((doc) =>
+        doc.getTags().some((tag) => tag.getTagName() === TAGS.hidden)
+      );
+    return hasHiddenTag;
+  }
+
+  private static hasMinitemsTag(prop: PropertyDeclaration): boolean {
+    const hasMinitemsTag = prop
+      .getJsDocs()
+      .some((doc) =>
+        doc.getTags().some((tag) => tag.getTagName() === TAGS.minitems)
+      );
+    return hasMinitemsTag;
   }
 }
