@@ -20,24 +20,24 @@ const RelationShips = {
  * https://mermaid-js.github.io/mermaid/#/entityRelationshipDiagram
  */
 export class MermaidErdWriter {
-  public render(tables: ITable[]): string {
+  public static render(tables: ITable[]): string {
     return `erDiagram\n  ${this.renderTables(tables)}\n  ${this.renderRelations(
       tables
     )}`;
   }
 
-  private renderRelations(tables: ITable[]) {
+  private static renderRelations(tables: ITable[]) {
     return this.buildRelations(tables).join("\n  ");
   }
 
-  private buildRelations(tables: ITable[]) {
+  private static buildRelations(tables: ITable[]) {
     return tables.reduce((acc, table) => {
       const relations = table.relations.map((rel) => {
         // Only add relations for the explicit owner
         if (!rel.propertyPath || !rel.isOwning) return "";
 
-        return `${rel.source} ${RelationShips["left"][rel.relationType]}--${
-          RelationShips["right"][rel.relationType]
+        return `${rel.source} ${RelationShips.left[rel.relationType]}--${
+          RelationShips.right[rel.relationType]
         } ${rel.target}: ${rel.propertyPath}`;
       });
 
@@ -45,7 +45,7 @@ export class MermaidErdWriter {
     }, [] as string[]);
   }
 
-  private renderTables(tables: ITable[]) {
+  private static renderTables(tables: ITable[]) {
     return tables
       .map((table) => {
         const columns = table.columns.map((column) => {

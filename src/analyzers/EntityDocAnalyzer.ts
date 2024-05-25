@@ -2,7 +2,7 @@ import { ClassDeclaration, Project, ts } from "ts-morph";
 import { IClassDoc } from "../structures";
 
 export class EntityDocAnalyzer {
-  public async analyze(sourceFilePath: string): Promise<IClassDoc[]> {
+  public static async analyze(sourceFilePath: string): Promise<IClassDoc[]> {
     const result: IClassDoc[] = [];
     const project = await this.loadProject(sourceFilePath);
     const sourceFiles = project.getSourceFiles();
@@ -14,7 +14,7 @@ export class EntityDocAnalyzer {
     return result;
   }
 
-  private async loadProject(sourceFilePath: string): Promise<Project> {
+  private static async loadProject(sourceFilePath: string): Promise<Project> {
     const project = new Project();
     project.addSourceFilesAtPaths(sourceFilePath);
     if (project.getSourceFiles().length === 0) {
@@ -25,19 +25,24 @@ export class EntityDocAnalyzer {
     return project;
   }
 
-  private createEntity(cls: ClassDeclaration): IClassDoc {
+  private static createEntity(cls: ClassDeclaration): IClassDoc {
     return {
       name: this.extractEntityName(cls),
       docs: cls.getJsDocs().map((doc) => doc.getInnerText().trim()),
       namespaces: this.extractNamespaces(cls),
+      namespaceTags: [],
+      erdTags: [],
+      discribeTags: [],
+      hasHiddenTag: false,
       properties: cls.getProperties().map((prop) => ({
         name: prop.getName(),
         docs: prop.getJsDocs().map((doc) => doc.getInnerText().trim()),
+        hasMinitemsTag: false,
       })),
     };
   }
 
-  private extractEntityName(cls: ClassDeclaration): string {
+  private static extractEntityName(cls: ClassDeclaration): string {
     return (
       this.extractEntityDecoratorNameParameter(cls) ??
       this.extractClassName(cls)
@@ -47,7 +52,7 @@ export class EntityDocAnalyzer {
   /**
    * '@Entity("user")'에서 entity name을 추출하는 함수
    */
-  private extractEntityDecoratorNameParameter(
+  private static extractEntityDecoratorNameParameter(
     cls: ClassDeclaration
   ): string | null {
     const entityDecorator = cls.getDecorator("Entity");
@@ -59,20 +64,20 @@ export class EntityDocAnalyzer {
     return null;
   }
 
-  private extractClassName(cls: ClassDeclaration): string {
+  private static extractClassName(cls: ClassDeclaration): string {
     const className = cls.getName();
     if (!className) throw new Error("Entity class must have a name.");
     return this.transformToSnakeCase(className);
   }
 
-  private transformToSnakeCase(name: string): string {
+  private static transformToSnakeCase(name: string): string {
     return name
       .replace(/([A-Z])/g, "_$1")
       .toLowerCase()
       .substring(1);
   }
 
-  private extractNamespaces(cls: ClassDeclaration): string[] {
+  private static extractNamespaces(cls: ClassDeclaration): string[] {
     const result: string[] = [];
     cls.getJsDocs().forEach((doc) => {
       doc.getTags().forEach((tag) => {
@@ -81,7 +86,7 @@ export class EntityDocAnalyzer {
         }
       });
     });
-    if (result.length === 0) result.push("UnknownNamespace");
+    if (result.length === 0) result.push("Default");
     return result;
   }
 }

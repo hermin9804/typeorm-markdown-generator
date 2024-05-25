@@ -4,26 +4,10 @@ import { RelationMetadata } from "typeorm/metadata/RelationMetadata";
 import { IColumn, IRelation, ITable } from "../structures";
 
 export class EntityMetadataAnalyzer {
-  private dataSource: DataSource;
-
-  constructor(dataSource: DataSource) {
-    this.dataSource = dataSource;
-  }
-
-  private async initialize() {
-    await this.dataSource.initialize();
-  }
-
-  private async destroy() {
-    await this.dataSource.destroy();
-  }
-
-  public async analyze(): Promise<ITable[]> {
-    await this.initialize();
-    const connectionMetadataBuilder = new ConnectionMetadataBuilder(
-      this.dataSource
-    );
-    const { entities } = this.dataSource.options;
+  public static async analyze(dataSource: DataSource): Promise<ITable[]> {
+    await this.initialize(dataSource);
+    const connectionMetadataBuilder = new ConnectionMetadataBuilder(dataSource);
+    const { entities } = dataSource.options;
     const TEntities = entities as (Function | EntitySchema<any> | string)[];
     let entityMetadatas: EntityMetadata[];
     if (entities) {
@@ -32,27 +16,38 @@ export class EntityMetadataAnalyzer {
       );
       if (entityMetadatas.length === 0) {
         throw Error(
-          "No entities found on connection, check your Typeorm datasource entities or entitie path"
+          "No entities found on connection, check your Typeorm datasource entities or entity path"
         );
       }
     } else {
       throw Error("No entities found on connection");
     }
-    const tables = this.mapTables(entityMetadatas);
-    await this.destroy();
+    const tables = this.mapTables(dataSource, entityMetadatas);
+    await this.destroy(dataSource);
     return tables;
   }
 
-  private mapTables(entityMetadatas: EntityMetadata[]): ITable[] {
+  private static async initialize(dataSource: DataSource) {
+    await dataSource.initialize();
+  }
+
+  private static async destroy(dataSource: DataSource) {
+    await dataSource.destroy();
+  }
+
+  private static mapTables(
+    dataSource: DataSource,
+    entityMetadatas: EntityMetadata[]
+  ): ITable[] {
     return entityMetadatas.map((entity) => {
       const columns: IColumn[] = entity.columns.map((column) => ({
-        type: this.dataSource.driver.normalizeType(column),
+        type: dataSource.driver.normalizeType(column),
         name: column.databaseName,
         isPrimary: column.isPrimary,
         isForeignKey: !!column.referencedColumn,
       }));
       const relations: IRelation[] = entity.relations.map((rel) =>
-        this.resolveRelation(entity, rel)
+        this.resolveRelation(dataSource, entity, rel)
       );
       return {
         name: entity.tableName,
@@ -62,7 +57,8 @@ export class EntityMetadataAnalyzer {
     });
   }
 
-  private resolveRelation(
+  private static resolveRelation(
+    dataSource: DataSource,
     entity: EntityMetadata,
     {
       relationType,
@@ -91,7 +87,7 @@ export class EntityMetadataAnalyzer {
       derivedOwnership = true;
     }
 
-    return {
+    const ret = {
       relationType: derivedRelationType,
       propertyPath,
       isOwning: derivedOwnership,
@@ -101,5 +97,7 @@ export class EntityMetadataAnalyzer {
       joinTableName: derivedJoinTable,
       target,
     };
+    console.log(ret);
+    return ret;
   }
 }

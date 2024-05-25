@@ -23,5 +23,3 @@ export const findProjectRoot = async (): Promise<string | undefined> => {
     }
   }
 };
-
-export default findProjectRoot;

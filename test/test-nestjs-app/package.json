@@ -8,6 +8,7 @@
   "scripts": {
     "build": "nest build",
     "build:erd": "node dist/generate-erd.js",
+    "test:erd": "npm i ../../../typeorm-markdown-generator && npm run build:erd",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

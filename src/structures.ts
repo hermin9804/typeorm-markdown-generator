@@ -8,14 +8,14 @@ export interface ITable {
 }
 
 export interface IColumn {
-  type: string;
   name: string;
+  type: string;
   isPrimary: boolean;
   isForeignKey: boolean;
 }
 
 export interface IRelation {
-  relationType: RelationType;
+  relationType: "one-to-one" | "one-to-many" | "many-to-one" | "many-to-many";
   propertyPath: string;
   nullable: boolean;
   isOwning: boolean;
@@ -25,12 +25,6 @@ export interface IRelation {
   joinTableName: string;
 }
 
-export type RelationType =
-  | "one-to-one"
-  | "one-to-many"
-  | "many-to-one"
-  | "many-to-many";
-
 /**
  * analyzed typeorm entity jsDoc
  * todo!!: tags 구별해야함.
@@ -39,12 +33,17 @@ export interface IClassDoc {
   name: string;
   docs: string[];
   namespaces: string[];
+  namespaceTags: string[];
+  erdTags: string[];
+  discribeTags: string[];
+  hasHiddenTag: boolean;
   properties: IPropertyDoc[];
 }
 
 export interface IPropertyDoc {
   name: string;
   docs: string[];
+  hasMinitemsTag: boolean;
 }
 
 /**
@@ -52,8 +51,8 @@ export interface IPropertyDoc {
  */
 export interface INamespace {
   name: string;
-  classDocs: IClassDoc[];
   tables: ITable[];
+  classDocs: IClassDoc[];
 }
 
 /**

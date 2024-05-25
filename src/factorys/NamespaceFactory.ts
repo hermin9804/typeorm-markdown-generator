@@ -1,7 +1,7 @@
 import { IClassDoc, INamespace, ITable } from "../structures";
 
 export class NamespaceFactory {
-  public create(tables: ITable[], classDocs: IClassDoc[]): INamespace[] {
+  public static create(tables: ITable[], classDocs: IClassDoc[]): INamespace[] {
     const uniqueNamespaces = this.getUniqueNamespaces(classDocs);
 
     return uniqueNamespaces.map((namespace) => {
@@ -22,19 +22,19 @@ export class NamespaceFactory {
     });
   }
 
-  private getUniqueNamespaces(classDocs: IClassDoc[]): string[] {
+  private static getUniqueNamespaces(classDocs: IClassDoc[]): string[] {
     const namespaces = classDocs.flatMap((doc) => doc.namespaces);
     return Array.from(new Set(namespaces));
   }
 
-  private getClassDocsInNamespace(
+  private static getClassDocsInNamespace(
     classDocs: IClassDoc[],
     namespace: string
   ): IClassDoc[] {
     return classDocs.filter((doc) => doc.namespaces.includes(namespace));
   }
 
-  private getMatchingTables(
+  private static getMatchingTables(
     classDocs: IClassDoc[],
     tables: ITable[]
   ): ITable[] {
@@ -44,12 +44,12 @@ export class NamespaceFactory {
   }
 
   // Filter out relations that point to tables not in the current namespace
-  private filterTableRelations(tables: ITable[]): ITable[] {
-    const tableNames = new Set(tables.map((table) => table.name.toLowerCase()));
+  private static filterTableRelations(tables: ITable[]): ITable[] {
+    const tableNames = new Set(tables.map((table) => table.name));
     return tables.map((table) => ({
       ...table,
       relations: table.relations.filter((relation) =>
-        tableNames.has(relation.target.toLowerCase())
+        tableNames.has(relation.target)
       ),
     }));
   }
