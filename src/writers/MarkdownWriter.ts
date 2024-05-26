@@ -49,7 +49,6 @@ export class MarkdownWriter {
 
   private static writeBodyContent(namespaces: INamespace[]): void {
     namespaces.forEach((namespace) => {
-      this.lines.push("---");
       this.lines.push(`## ${namespace.namespaceName}\n`);
       this.writeMermaidErd(namespace);
       namespace.classDocs.forEach((doc) => {
