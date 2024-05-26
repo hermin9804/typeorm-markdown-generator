@@ -1,6 +1,5 @@
 import { EntitySpec } from "../models/EntitySpec";
-import { Namespace } from "../models/Namespace";
-import { IClassDoc, ITable } from "../structures";
+import { IClassDoc, INamespace, ITable } from "../structures";
 
 export class EntitySpecContainer {
   private uniqueNamespaceNames: string[] = [];
@@ -15,7 +14,26 @@ export class EntitySpecContainer {
       });
     });
     this.updateMinitemsRelations();
+    this.removeRelationPropertyDoc();
     this.setUniqueNamespaceNames();
+  }
+
+  public createNamespcace(): INamespace[] {
+    return this.uniqueNamespaceNames.map((namespaceName) => {
+      const tables = this.getTablesInNamespace(namespaceName);
+      const classDocs = this.getDocsInNamespace(namespaceName);
+      return {
+        namespaceName,
+        tables,
+        classDocs,
+      };
+    });
+  }
+
+  private removeRelationPropertyDoc() {
+    this.entitySpecs.forEach((entitySpec) => {
+      entitySpec.removeRelationPropertyDoc();
+    });
   }
 
   private updateMinitemsRelations() {
@@ -30,14 +48,6 @@ export class EntitySpecContainer {
       this.entitySpecs.forEach((entitySpec) => {
         entitySpec.updatMinitemsRelation(inverseRelation);
       });
-    });
-  }
-
-  public createNamespcace(): Namespace[] {
-    return this.uniqueNamespaceNames.map((namespaceName) => {
-      const tables = this.getTablesInNamespace(namespaceName);
-      const docs = this.getDocsInNamespace(namespaceName);
-      return new Namespace(namespaceName, tables, docs);
     });
   }
 

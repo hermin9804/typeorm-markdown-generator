@@ -12,21 +12,16 @@ export class EntitySpec {
     this.linkMinitemsTagBetweenTableAndDoc();
   }
 
-  public getNamespaces(): string[] {
-    return this.doc.namespaces;
+  public removeRelationPropertyDoc() {
+    this.doc.properties = this.doc.properties.filter((property) =>
+      this.table.columns.some(
+        (column) => column.columnName === property.propertyName
+      )
+    );
   }
 
-  private linkMinitemsTagBetweenTableAndDoc() {
-    const minitemTagedProperties = this.doc.properties.filter(
-      (property) => property.hasMinitemsTag
-    );
-    minitemTagedProperties.forEach((property) => {
-      this.table.relations.forEach((relation) => {
-        if (relation.propertyPath === property.propertyName) {
-          relation.hasMinitemsTag = true;
-        }
-      });
-    });
+  public getNamespaces(): string[] {
+    return this.doc.namespaces;
   }
 
   public getHasMinitemsTagRelations() {
@@ -50,13 +45,6 @@ export class EntitySpec {
       relation.relationType = "minitems-many-to-many";
     }
   }
-
-  private getRelationByRelationSourceAndTarget(source: string, target: string) {
-    return this.table.relations.find(
-      (relation) => relation.source === source && relation.target === target
-    );
-  }
-
   public getTable(namespaceName: string): ITable | null {
     if (this.doc.hasHiddenTag) return null;
     if (this.doc.namespaceTags.includes(namespaceName)) return this.table;
@@ -69,5 +57,24 @@ export class EntitySpec {
     if (this.doc.namespaceTags.includes(namespaceName)) return this.doc;
     if (this.doc.discribeTags.includes(namespaceName)) return this.doc;
     return null;
+  }
+
+  private linkMinitemsTagBetweenTableAndDoc() {
+    const minitemTagedProperties = this.doc.properties.filter(
+      (property) => property.hasMinitemsTag
+    );
+    minitemTagedProperties.forEach((property) => {
+      this.table.relations.forEach((relation) => {
+        if (relation.propertyPath === property.propertyName) {
+          relation.hasMinitemsTag = true;
+        }
+      });
+    });
+  }
+
+  private getRelationByRelationSourceAndTarget(source: string, target: string) {
+    return this.table.relations.find(
+      (relation) => relation.source === source && relation.target === target
+    );
   }
 }
