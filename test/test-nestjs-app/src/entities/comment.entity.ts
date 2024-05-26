@@ -11,7 +11,7 @@ import { UserEntity } from './user.entity';
 
 /**
  * Comment entity represents a comment on a post in the application.
- * @namespace Post
+ * @erd Post
  */
 @Entity()
 export class Comment {

@@ -9,8 +9,8 @@
 
 
 - [Post](#post)
-- [User](#user)
 - [ShoppingMall](#shoppingmall)
+- [User](#user)
 
 
 ## Post
@@ -42,20 +42,6 @@ erDiagram
   post }o--|| user: user
 ```
 
-### comment
-
-Comment entity represents a comment on a post in the application.
-@namespace Post
-
-**Properties**
-
-  - `id`: Primary key for the comment.
-  - `content`: Content of the comment.
-  - `postId`: Post ID to which the comment belongs.
-  - `parentId`: parent comment id of the current comment.
-  - `userId`: User ID who created the comment.
-
-
 ### post
 
 Post entity represents a post in the application.
@@ -68,65 +54,6 @@ Post entity represents a post in the application.
   - `content`: Content of the post.
   - `categoryId`: Category ID of the post.
   - `userId`: User ID who created the post.
-
-
-## User
-
-```mermaid
-erDiagram
-  profile {
-    integer id PK
-    varchar bio
-    integer userId FK
-  }
-  group {
-    integer id PK
-    varchar name
-  }
-  user {
-    integer id PK
-    varchar username
-    varchar email
-  }
-  profile ||--|| user: user
-  user }|--|{ group: groups
-```
-
-### profile
-
-Profile entity represents additional user details.
-@namespace User
-
-**Properties**
-
-  - `id`: Primary key for the profile.
-  - `bio`: Biography of the user.
-  - `userId`: User ID associated with this profile.
-
-
-### group
-
-Group entity represents a group of users in the application.
-@namespace User
-
-**Properties**
-
-  - `id`: 
-  - `name`: 
-
-
-### user
-
-User entity represents a user in the application.
-@namespace User
-@erd Post
-@discribe ShoppingMall
-
-**Properties**
-
-  - `id`: Primary key for the user.
-  - `username`: Username of the user.
-  - `email`: Email of the user.
 
 
 ## ShoppingMall
@@ -150,8 +77,14 @@ erDiagram
     integer userId FK
     timestamp orderDate
   }
+  user {
+    integer id PK
+    varchar username
+    varchar email
+  }
   order_item }|--|| order: order
   order_item }o--|| product: product
+  order }o--|| user: user
 ```
 
 ### product
@@ -192,12 +125,36 @@ Order entity represents an order in the shopping mall.
   - `orderDate`: Date the order was placed.
 
 
+## User
+
+```mermaid
+erDiagram
+  user {
+    integer id PK
+    varchar username
+    varchar email
+  }
+  
+```
+
+### profile
+
+Profile entity represents additional user details.
+@describe User
+
+**Properties**
+
+  - `id`: Primary key for the profile.
+  - `bio`: Biography of the user.
+  - `userId`: User ID associated with this profile.
+
+
 ### user
 
 User entity represents a user in the application.
 @namespace User
 @erd Post
-@discribe ShoppingMall
+@erd ShoppingMall
 
 **Properties**
 

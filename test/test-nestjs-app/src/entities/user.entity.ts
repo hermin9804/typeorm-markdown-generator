@@ -17,7 +17,7 @@ import { Group } from './group.entity';
  * User entity represents a user in the application.
  * @namespace User
  * @erd Post
- * @discribe ShoppingMall
+ * @erd ShoppingMall
  */
 @Entity('user')
 export class UserEntity {
@@ -47,7 +47,6 @@ export class UserEntity {
 
   /**
    * Profile associated with the user.
-   * @minitems 1
    */
   @OneToOne(() => Profile, (profile) => profile.user)
   profileeee!: Profile;

@@ -3,7 +3,7 @@ import { UserEntity } from './user.entity';
 
 /**
  * Group entity represents a group of users in the application.
- * @namespace User
+ * @hidden
  */
 @Entity()
 export class Group {

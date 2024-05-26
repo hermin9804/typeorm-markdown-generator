@@ -1,7 +1,5 @@
 # TypeORM Markdown Generator
 
-## Table of Contents
-
 - [Overview](#overview)
 - [Features](#features)
 - [Example Output](#example-output)
@@ -120,41 +118,62 @@ export class DefaultEntityName {
 Use the following comment tags in your TypeORM entities to generate descriptive documentation:
 
 - `/** */` for general JSDoc comments.
-- `@namespace <name>`: Both ERD and markdown content.
-- (TODO) `@erd <name>`: Only ERD.
-- (TODO) `@describe <name>`: Only markdown content.
-- (TODO) `@hidden`: Neither ERD nor markdown content.
-- (TODO) `@minitems 1`: Mandatory relationship when 1: N (||---|{).
+- `@namespace <name>`
+  - Both ERD and markdown content
+  - if `@namespace` is not defined, it will be placed in the `Default` namespace.
+- `@erd <name>`: Only ERD.
+- `@describe <name>`: Only markdown content.
+- `@hidden`: Neither ERD nor markdown content.
+- `@minitems 1`: Mandatory relationship when 1: N (||---|{).
 
 ```ts
 /**
- * User entity represents a user in the application.
+ * Both description and ERD on User chatper.
+ * Also, only ERD on Post and ShoppingMall chapters.
  * @namespace User
+ * @erd Post
+ * @erd ShoppingMall
  */
 @Entity()
-export class User {
-  /**
-   * Primary key for the user.
-   */
-  @PrimaryGeneratedColumn()
-  id!: number;
+export class User {}
 
-  /**
-   * Username of the user.
-   */
-  @Column()
-  username!: string;
+/**
+ * Only description on User chapter.
+ * @describe User
+ */
+@Entity()
+export class Profile {}
 
-  /**
-   * List of posts created by the user.
-   */
-  @OneToMany(() => Post, (post) => post.user)
-  posts!: Post[];
+/**
+ * Only ERD on Post chapter.
+ * @erd Post
+ */
+@Entity()
+export class Comment {}
 
+/**
+ * Both description and ERD on ShoppingMall chatper.
+ * @namespace ShoppingMall
+ */
+@Entity()
+export class Order {
   /**
-   * Profile associated with the user.
+   * The tag "minItems 1" means mandatory relationship `||---|{`.
+   * Otherwise, no tag means optional relationship `||---o{`.
+   * @minitems 1
    */
-  @OneToOne(() => Profile, (profile) => profile.user)
-  profile!: Profile;
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
+  orderItems!: OrderItem[];
 }
+
+/**
+ * Never be shown.
+ * @hidden
+ */
+@Entity()
+export class Group {}
 ```
+
+### Example Entities
+
+- [Example Entities](https://github.com/hermin9804/typeorm-markdown-generator/tree/main/test/test-nestjs-app/src/entities)

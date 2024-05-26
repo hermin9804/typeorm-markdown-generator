@@ -9,7 +9,7 @@ import { UserEntity } from './user.entity';
 
 /**
  * Profile entity represents additional user details.
- * @namespace User
+ * @describe User
  */
 @Entity()
 export class Profile {
