@@ -4,11 +4,14 @@ import {
   Column,
   OneToMany,
   OneToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Post } from './post.entity';
 import { Profile } from './profile.entity';
 import { Order } from './order.entity';
 import { Comment } from './comment.entity';
+import { Group } from './group.entity';
 
 /**
  * User entity represents a user in the application.
@@ -16,7 +19,7 @@ import { Comment } from './comment.entity';
  * @erd Post
  * @discribe ShoppingMall
  */
-@Entity()
+@Entity('user')
 export class UserEntity {
   /**
    * Primary key for the user.
@@ -44,9 +47,10 @@ export class UserEntity {
 
   /**
    * Profile associated with the user.
+   * @minitems 1
    */
   @OneToOne(() => Profile, (profile) => profile.user)
-  profile!: Profile;
+  profileeee!: Profile;
 
   /**
    * Orders placed by the user.
@@ -59,4 +63,11 @@ export class UserEntity {
    */
   @OneToMany(() => Comment, (comment) => comment.user)
   comments!: Comment[];
+
+  /**
+   * Groups the user belongs to.
+   */
+  @ManyToMany(() => Group, (group) => group.users)
+  @JoinTable()
+  groups: Group[];
 }

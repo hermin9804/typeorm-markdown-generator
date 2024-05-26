@@ -14,7 +14,23 @@ export class EntitySpecContainer {
         }
       });
     });
+    this.updateMinitemsRelations();
     this.setUniqueNamespaceNames();
+  }
+
+  private updateMinitemsRelations() {
+    const hasMinitemsTagRelations = this.entitySpecs.flatMap((entitySpec) =>
+      entitySpec.getHasMinitemsTagRelations()
+    );
+    const inverseRelations = hasMinitemsTagRelations.map((relation) => ({
+      source: relation.target,
+      target: relation.source,
+    }));
+    inverseRelations.forEach((inverseRelation) => {
+      this.entitySpecs.forEach((entitySpec) => {
+        entitySpec.updatMinitemsRelation(inverseRelation);
+      });
+    });
   }
 
   public createNamespcace(): Namespace[] {

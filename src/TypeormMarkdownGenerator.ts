@@ -24,7 +24,6 @@ export class TypeormMarkdownGenerator {
 
     const entitySpecContainer = new EntitySpecContainer(tables, entityDocs);
     const namespaces = entitySpecContainer.createNamespcace();
-    console.log("namespaces", JSON.stringify(namespaces, null, 2));
 
     MarkdownWriter.render(
       this.markdownConfig.title,

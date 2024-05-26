@@ -42,6 +42,7 @@ export class Order {
 
   /**
    * List of order items in the order.
+   * @minitems 1
    */
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
   orderItems!: OrderItem[];

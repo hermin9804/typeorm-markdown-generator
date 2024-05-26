@@ -9,10 +9,52 @@ export class EntitySpec {
     this.entityName = table.tableName;
     this.table = table;
     this.doc = doc;
+    this.linkMinitemsTagBetweenTableAndDoc();
   }
 
   public getNamespaces(): string[] {
     return this.doc.namespaces;
+  }
+
+  private linkMinitemsTagBetweenTableAndDoc() {
+    const minitemTagedProperties = this.doc.properties.filter(
+      (property) => property.hasMinitemsTag
+    );
+    minitemTagedProperties.forEach((property) => {
+      this.table.relations.forEach((relation) => {
+        if (relation.propertyPath === property.propertyName) {
+          relation.hasMinitemsTag = true;
+        }
+      });
+    });
+  }
+
+  public getHasMinitemsTagRelations() {
+    return this.table.relations.filter((relation) => relation.hasMinitemsTag);
+  }
+
+  public updatMinitemsRelation({
+    source,
+    target,
+  }: {
+    source: string;
+    target: string;
+  }) {
+    const relation = this.getRelationByRelationSourceAndTarget(source, target);
+    if (!relation) return;
+    if (relation.relationType === "one-to-one") {
+      relation.relationType = "minitems-one-to-one";
+    } else if (relation.relationType === "many-to-one") {
+      relation.relationType = "minitems-many-to-one";
+    } else if (relation.relationType === "many-to-many") {
+      relation.relationType = "minitems-many-to-many";
+    }
+  }
+
+  private getRelationByRelationSourceAndTarget(source: string, target: string) {
+    return this.table.relations.find(
+      (relation) => relation.source === source && relation.target === target
+    );
   }
 
   public getTable(namespaceName: string): ITable | null {
@@ -27,9 +69,5 @@ export class EntitySpec {
     if (this.doc.namespaceTags.includes(namespaceName)) return this.doc;
     if (this.doc.discribeTags.includes(namespaceName)) return this.doc;
     return null;
-  }
-
-  clone(): EntitySpec {
-    return new EntitySpec(this.table, this.doc);
   }
 }

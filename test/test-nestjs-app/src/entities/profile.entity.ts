@@ -25,6 +25,9 @@ export class Profile {
   @Column()
   bio!: string;
 
+  /**
+   * User ID associated with this profile.
+   */
   @Column()
   userId!: number;
 

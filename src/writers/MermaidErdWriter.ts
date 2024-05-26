@@ -2,18 +2,22 @@ import { ITable } from "../structures";
 
 const RelationShips = {
   left: {
-    "one-to-many": "||",
-    // "many-to-one": "}|",
-    "many-to-one": "}o",
-    // "one-to-one": "||",
     "one-to-one": "|o",
+    "one-to-many": "||",
+    "many-to-one": "}o",
     "many-to-many": "}|",
+    "minitems-one-to-one": "||",
+    "minitems-many-to-one": "}|",
+    "minitems-many-to-many": "}|",
   },
   right: {
+    "one-to-one": "||",
     "one-to-many": "|{",
     "many-to-one": "||",
-    "one-to-one": "||",
     "many-to-many": "|{",
+    "minitems-one-to-one": "||",
+    "minitems-many-to-one": "||",
+    "minitems-many-to-many": "||",
   },
 };
 
@@ -55,8 +59,9 @@ export class MermaidErdWriter {
           const columnName = column.columnName;
           const isPrimary = column.isPrimary ? "PK" : "";
           const isForeignKey = column.isForeignKey ? "FK" : "";
+          const isNullable = column.isNullable ? '"nullable"' : "";
 
-          return [columnType, columnName, isPrimary, isForeignKey]
+          return [columnType, columnName, isPrimary, isForeignKey, isNullable]
             .filter(Boolean)
             .join(" ");
         });

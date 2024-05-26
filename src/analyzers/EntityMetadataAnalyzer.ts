@@ -45,6 +45,7 @@ export class EntityMetadataAnalyzer {
         columnName: column.databaseName,
         isPrimary: column.isPrimary,
         isForeignKey: !!column.referencedColumn,
+        isNullable: column.isNullable,
       }));
       const relations: IRelation[] = entity.relations.map((rel) =>
         this.resolveRelation(entity, rel)
@@ -66,6 +67,8 @@ export class EntityMetadataAnalyzer {
       inverseSidePropertyPath,
       isOwning,
       joinTableName,
+      joinColumns,
+      inverseJoinColumns,
       inverseRelation,
     }: RelationMetadata
   ): IRelation {
@@ -74,16 +77,11 @@ export class EntityMetadataAnalyzer {
 
     let target = inverseEntityMetadata.tableName;
     let derivedRelationType = relationType;
-    let derivedJoinTable =
-      inverseRelation && inverseRelation.joinTableName
-        ? inverseRelation.joinTableName
-        : joinTableName;
+    let derivedJoinTable = joinTableName;
     let derivedOwnership = isOwning;
 
-    if (derivedJoinTable) {
-      target = derivedJoinTable;
-      derivedRelationType = "one-to-many";
-      derivedOwnership = true;
+    if (joinColumns.length > 0 && inverseJoinColumns.length > 0) {
+      derivedRelationType = "many-to-many";
     }
 
     const ret = {
@@ -95,8 +93,9 @@ export class EntityMetadataAnalyzer {
       source: entity.tableName,
       joinTableName: derivedJoinTable,
       target,
+      hasMinitemsTag: false,
     };
-    console.log(ret);
+    // console.log(ret);
     return ret;
   }
 }
