@@ -55,7 +55,7 @@ export class EntitySpec {
   public getDoc(namespaceName: string): IClassDoc | null {
     if (this.doc.hasHiddenTag) return null;
     if (this.doc.namespaceTags.includes(namespaceName)) return this.doc;
-    if (this.doc.discribeTags.includes(namespaceName)) return this.doc;
+    if (this.doc.describeTags.includes(namespaceName)) return this.doc;
     return null;
   }
 

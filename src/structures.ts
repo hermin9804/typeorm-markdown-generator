@@ -43,7 +43,7 @@ export interface IClassDoc {
   namespaces: string[];
   namespaceTags: string[];
   erdTags: string[];
-  discribeTags: string[];
+  describeTags: string[];
   hasHiddenTag: boolean;
   properties: IPropertyDoc[];
 }

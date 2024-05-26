@@ -4,7 +4,7 @@ import { IClassDoc } from "../structures";
 const TAGS = {
   namespace: "namespace",
   erd: "erd",
-  discribe: "discribe",
+  describe: "describe",
   hidden: "hidden",
   minitems: "minitems",
 };
@@ -40,7 +40,7 @@ export class EntityDocAnalyzer {
       namespaces: this.extractNamespaces(cls),
       namespaceTags: this.extractNamespaces(cls),
       erdTags: this.extractErdTags(cls),
-      discribeTags: this.extractDiscribeTags(cls),
+      describeTags: this.extractDiscribeTags(cls),
       hasHiddenTag: this.hasHiddenTag(cls),
       properties: cls.getProperties().map((prop) => ({
         propertyName: prop.getName(),
@@ -94,7 +94,7 @@ export class EntityDocAnalyzer {
         }
       });
     });
-    if (result.length === 0) result.push("Default");
+    // if (result.length === 0) result.push("Default");
     return result;
   }
 
@@ -114,7 +114,7 @@ export class EntityDocAnalyzer {
     const result: string[] = [];
     cls.getJsDocs().forEach((doc) => {
       doc.getTags().forEach((tag) => {
-        if (tag.getTagName() === TAGS.discribe) {
+        if (tag.getTagName() === TAGS.describe) {
           result.push(tag.getCommentText() ?? "");
         }
       });
