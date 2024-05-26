@@ -17,7 +17,7 @@ const RelationShips = {
     "many-to-many": "|{",
     "minitems-one-to-one": "||",
     "minitems-many-to-one": "||",
-    "minitems-many-to-many": "||",
+    "minitems-many-to-many": "|{",
   },
 };
 
