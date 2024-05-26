@@ -9,8 +9,8 @@
 
 
 - [Post](#post)
-- [ShoppingMall](#shoppingmall)
 - [User](#user)
+- [ShoppingMall](#shoppingmall)
 
 
 ## Post
@@ -56,10 +56,53 @@ Post entity represents a post in the application.
   - `userId`: User ID who created the post.
 
 
+## User
+
+```mermaid
+erDiagram
+  user {
+    integer id PK
+    varchar username
+    varchar email
+  }
+  
+```
+
+### profile
+
+Profile entity represents additional user details.
+@describe User
+
+**Properties**
+
+  - `id`: Primary key for the profile.
+  - `bio`: Biography of the user.
+  - `userId`: User ID associated with this profile.
+
+
+### user
+
+User entity represents a user in the application.
+@namespace User
+@erd Post
+@erd ShoppingMall
+
+**Properties**
+
+  - `id`: Primary key for the user.
+  - `username`: Username of the user.
+  - `email`: Email of the user.
+
+
 ## ShoppingMall
 
 ```mermaid
 erDiagram
+  user {
+    integer id PK
+    varchar username
+    varchar email
+  }
   product {
     integer id PK
     varchar name
@@ -76,11 +119,6 @@ erDiagram
     integer id PK
     integer userId FK
     timestamp orderDate
-  }
-  user {
-    integer id PK
-    varchar username
-    varchar email
   }
   order_item }|--|| order: order
   order_item }o--|| product: product
@@ -123,42 +161,4 @@ Order entity represents an order in the shopping mall.
   - `id`: Primary key for the order.
   - `userId`: User ID who placed the order.
   - `orderDate`: Date the order was placed.
-
-
-## User
-
-```mermaid
-erDiagram
-  user {
-    integer id PK
-    varchar username
-    varchar email
-  }
-  
-```
-
-### profile
-
-Profile entity represents additional user details.
-@describe User
-
-**Properties**
-
-  - `id`: Primary key for the profile.
-  - `bio`: Biography of the user.
-  - `userId`: User ID associated with this profile.
-
-
-### user
-
-User entity represents a user in the application.
-@namespace User
-@erd Post
-@erd ShoppingMall
-
-**Properties**
-
-  - `id`: Primary key for the user.
-  - `username`: Username of the user.
-  - `email`: Email of the user.
 
