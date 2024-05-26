@@ -40,7 +40,6 @@ export interface IRelation {
 export interface IClassDoc {
   className: string;
   docs: string[];
-  namespaces: string[];
   namespaceTags: string[];
   erdTags: string[];
   describeTags: string[];

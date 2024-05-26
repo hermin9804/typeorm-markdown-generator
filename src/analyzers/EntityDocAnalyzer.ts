@@ -16,7 +16,7 @@ export class EntityDocAnalyzer {
     const sourceFiles = project.getSourceFiles();
     sourceFiles.forEach((sourceFile) => {
       sourceFile.getClasses().forEach((cls) => {
-        result.push(this.createEntity(cls));
+        result.push(this.createClassDoc(cls));
       });
     });
     return result;
@@ -33,11 +33,10 @@ export class EntityDocAnalyzer {
     return project;
   }
 
-  private static createEntity(cls: ClassDeclaration): IClassDoc {
-    return {
+  private static createClassDoc(cls: ClassDeclaration): IClassDoc {
+    const ret = {
       className: this.extractEntityName(cls),
       docs: cls.getJsDocs().map((doc) => doc.getInnerText().trim()),
-      namespaces: this.extractNamespaces(cls),
       namespaceTags: this.extractNamespaces(cls),
       erdTags: this.extractErdTags(cls),
       describeTags: this.extractDiscribeTags(cls),
@@ -48,6 +47,17 @@ export class EntityDocAnalyzer {
         hasMinitemsTag: this.hasMinitemsTag(prop),
       })),
     };
+    // namespqceTags, erdTags, describeTags, hasHiddenTag 가 하나라도 없으면 Default namespace 추가
+    if (
+      ret.namespaceTags.length === 0 &&
+      ret.erdTags.length === 0 &&
+      ret.describeTags.length === 0 &&
+      !ret.hasHiddenTag
+    ) {
+      console.log("Default namespace added");
+      ret.namespaceTags.push("Default");
+    }
+    return ret;
   }
 
   private static extractEntityName(cls: ClassDeclaration): string {

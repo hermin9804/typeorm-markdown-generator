@@ -53,7 +53,7 @@ export class EntitySpecContainer {
 
   private setUniqueNamespaceNames(): string[] {
     const namespaces = this.entitySpecs.flatMap((entitySpec) =>
-      entitySpec.getNamespaces()
+      entitySpec.getNamespaceTags()
     );
     this.uniqueNamespaceNames = Array.from(new Set(namespaces));
     return this.uniqueNamespaceNames;

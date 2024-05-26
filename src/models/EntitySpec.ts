@@ -20,8 +20,8 @@ export class EntitySpec {
     );
   }
 
-  public getNamespaces(): string[] {
-    return this.doc.namespaces;
+  public getNamespaceTags(): string[] {
+    return this.doc.namespaceTags;
   }
 
   public getHasMinitemsTagRelations() {

@@ -117,14 +117,14 @@ export class DefaultEntityName {
 
 Use the following comment tags in your TypeORM entities to generate descriptive documentation:
 
-- `/** */` for general JSDoc comments.
-- `@namespace <name>`
-  - Both ERD and markdown content
-  - if `@namespace` is not defined, it will be placed in the `Default` namespace.
+- `/** */` : General JSDoc comments.
+- `@namespace <name>`: Both ERD and markdown content
 - `@erd <name>`: Only ERD.
 - `@describe <name>`: Only markdown content.
 - `@hidden`: Neither ERD nor markdown content.
 - `@minitems 1`: Mandatory relationship when 1: N (||---|{).
+
+> if @namespace, @erd, @describe, and @hidden are not defined, the entity will be placed in the `Default` namespace.
 
 ```ts
 /**
