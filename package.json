@@ -1,6 +1,6 @@
 {
   "name": "typeorm-markdown-generator",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A tool to generate markdown documentation from TypeORM entities",
   "repository": {
     "type": "git",
@@ -13,9 +13,13 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": [
-    "TypeORM",
-    "Markdown",
-    "Documentation"
+    "typeorm",
+    "erd",
+    "markdown",
+    "document",
+    "generator",
+    "mermaid",
+    "description"
   ],
   "author": "hermin",
   "license": "MIT",

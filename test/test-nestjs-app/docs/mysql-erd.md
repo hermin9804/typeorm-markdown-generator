@@ -14,7 +14,6 @@
 - [Default](#default)
 
 
----
 ## Post
 
 ```mermaid
@@ -58,7 +57,6 @@ Post entity represents a post in the application.
   - `userId`: User ID who created the post.
 
 
----
 ## ShoppingMall
 
 ```mermaid
@@ -124,16 +122,10 @@ Order entity represents an order in the shopping mall.
 **Properties**
 
   - `id`: Primary key for the order.
-  - `userId`
-    > User ID who placed the order.
-    > ex 123
-  - `orderDate`
-    > Date the order was placed.
-    > 
-    > ex) 2021-01-01
+  - `userId`: User ID who placed the order.
+  - `orderDate`: Date the order was placed.
 
 
----
 ## User
 
 ```mermaid
@@ -172,7 +164,6 @@ User entity represents a user in the application.
   - `email`: Email of the user.
 
 
----
 ## Default
 
 ```mermaid
