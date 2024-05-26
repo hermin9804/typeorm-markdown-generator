@@ -5,9 +5,6 @@ import { Entity, PrimaryGeneratedColumn } from 'typeorm';
  */
 @Entity()
 export class Default {
-  /**
-   * Primary key.
-   */
   @PrimaryGeneratedColumn()
   id!: number;
 }

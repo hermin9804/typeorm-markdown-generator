@@ -49,6 +49,7 @@ export class MarkdownWriter {
 
   private static writeBodyContent(namespaces: INamespace[]): void {
     namespaces.forEach((namespace) => {
+      this.lines.push("---");
       this.lines.push(`## ${namespace.namespaceName}\n`);
       this.writeMermaidErd(namespace);
       namespace.classDocs.forEach((doc) => {
@@ -62,13 +63,20 @@ export class MarkdownWriter {
     this.lines.push("```mermaid\n" + erdDiagram + "\n```\n");
   }
 
-  private static writeDocumentContent(doc: IClassDoc): void {
-    this.lines.push(`### ${doc.className}\n`);
-    this.lines.push(`${doc.docs.join(" ")}\n`);
+  private static writeDocumentContent(classDoc: IClassDoc): void {
+    this.lines.push(`### \`${classDoc.className}\`\n`);
+    this.lines.push(`${classDoc.docs.join("   \n")}\n`);
     this.lines.push("**Properties**\n");
 
-    doc.properties.forEach((prop: IPropertyDoc) => {
-      this.lines.push(`  - \`${prop.propertyName}\`: ${prop.docs.join(" ")}`);
+    classDoc.properties.forEach((prop: IPropertyDoc) => {
+      if (prop.docs.length === 1) {
+        this.lines.push(`  - \`${prop.propertyName}\`: ${prop.docs.join(" ")}`);
+      } else {
+        this.lines.push(`  - \`${prop.propertyName}\``);
+        prop.docs.forEach((doc) => {
+          this.lines.push(`    > ${doc}`);
+        });
+      }
     });
 
     this.lines.push("\n");

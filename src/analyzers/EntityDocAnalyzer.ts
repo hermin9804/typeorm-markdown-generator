@@ -36,14 +36,18 @@ export class EntityDocAnalyzer {
   private static createClassDoc(cls: ClassDeclaration): IClassDoc {
     const ret = {
       className: this.extractEntityName(cls),
-      docs: cls.getJsDocs().map((doc) => doc.getInnerText().trim()),
+      docs: cls
+        .getJsDocs()
+        .flatMap((doc) => this.splitByNewLine(doc.getInnerText().trim())),
       namespaceTags: this.extractNamespaces(cls),
       erdTags: this.extractErdTags(cls),
       describeTags: this.extractDiscribeTags(cls),
       hasHiddenTag: this.hasHiddenTag(cls),
       properties: cls.getProperties().map((prop) => ({
         propertyName: prop.getName(),
-        docs: prop.getJsDocs().map((doc) => doc.getInnerText().trim()),
+        docs: prop
+          .getJsDocs()
+          .flatMap((doc) => this.splitByNewLine(doc.getInnerText().trim())),
         hasMinitemsTag: this.hasMinitemsTag(prop),
       })),
     };
@@ -54,10 +58,13 @@ export class EntityDocAnalyzer {
       ret.describeTags.length === 0 &&
       !ret.hasHiddenTag
     ) {
-      console.log("Default namespace added");
       ret.namespaceTags.push("Default");
     }
     return ret;
+  }
+
+  private static splitByNewLine(text: string): string[] {
+    return text.split(/\r?\n/);
   }
 
   private static extractEntityName(cls: ClassDeclaration): string {
@@ -104,7 +111,6 @@ export class EntityDocAnalyzer {
         }
       });
     });
-    // if (result.length === 0) result.push("Default");
     return result;
   }
 
