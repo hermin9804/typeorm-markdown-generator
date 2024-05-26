@@ -2,6 +2,7 @@ import { DataSource, EntityMetadata, EntitySchema } from "typeorm";
 import { ConnectionMetadataBuilder } from "typeorm/connection/ConnectionMetadataBuilder";
 import { RelationMetadata } from "typeorm/metadata/RelationMetadata";
 import { IColumn, IRelation, ITable } from "../structures";
+import { ColumnMetadata } from "typeorm/metadata/ColumnMetadata";
 
 export class EntityMetadataAnalyzer {
   public static async analyze(dataSource: DataSource): Promise<ITable[]> {
@@ -41,7 +42,7 @@ export class EntityMetadataAnalyzer {
   ): ITable[] {
     return entityMetadatas.map((entity) => {
       const columns: IColumn[] = entity.columns.map((column) => ({
-        type: dataSource.driver.normalizeType(column),
+        type: this.normalizeType(column, dataSource),
         columnName: column.databaseName,
         isPrimary: column.isPrimary,
         isForeignKey: !!column.referencedColumn,
@@ -56,6 +57,14 @@ export class EntityMetadataAnalyzer {
         relations,
       };
     });
+  }
+
+  private static normalizeType(
+    column: ColumnMetadata,
+    dataSource: DataSource
+  ): string {
+    const originalType = dataSource.driver.normalizeType(column);
+    return SHORTEST_COLUMN_TYPE[originalType] || originalType;
   }
 
   private static resolveRelation(
@@ -84,7 +93,7 @@ export class EntityMetadataAnalyzer {
       derivedRelationType = "many-to-many";
     }
 
-    const ret = {
+    return {
       relationType: derivedRelationType,
       propertyPath,
       isOwning: derivedOwnership,
@@ -95,7 +104,16 @@ export class EntityMetadataAnalyzer {
       target,
       hasMinitemsTag: false,
     };
-    // console.log(ret);
-    return ret;
   }
 }
+
+const SHORTEST_COLUMN_TYPE: { [key: string]: string } = {
+  "character varying": "varchar",
+  "varying character": "varchar",
+  "timestamp without time zone": "timestamp",
+  "timestamp with time zone": "timestamptz",
+  "double precision": "double",
+  "timestamp with local time zone": "timestamp",
+  "time without time zone": "time",
+  "time with time zone": "timetz",
+};
