@@ -8,54 +8,10 @@
 
 
 
-- [Post](#post)
 - [ShoppingMall](#shoppingmall)
 - [User](#user)
+- [Post](#post)
 - [Default](#default)
-
-
-## Post
-
-```mermaid
-erDiagram
-  comment {
-    integer id PK
-    varchar content
-    integer postId FK
-    integer parentId FK "nullable"
-    integer userId FK
-  }
-  post {
-    integer id PK
-    varchar title
-    varchar content
-    integer categoryId FK
-    integer userId FK
-  }
-  user {
-    integer id PK
-    varchar username
-    varchar email
-    boolean isActive
-  }
-  comment }o--|| post: post
-  comment }o--|| comment: parent
-  comment }o--|| user: user
-  post }o--|| user: user
-```
-
-### `post`
-
-Post entity represents a post in the application.   
-@namespace Post
-
-**Properties**
-
-  - `id`: Primary key for the post.
-  - `title`: Title of the post.
-  - `content`: Content of the post.
-  - `categoryId`: Category ID of the post.
-  - `userId`: User ID who created the post.
 
 
 ## ShoppingMall
@@ -83,7 +39,6 @@ erDiagram
     integer id PK
     varchar username
     varchar email
-    boolean isActive
   }
   order_item }|--|| order: order
   order_item }o--|| product: product
@@ -143,7 +98,6 @@ erDiagram
     integer id PK
     varchar username
     varchar email
-    boolean isActive
   }
   
 ```
@@ -172,7 +126,49 @@ User entity represents a user in the application.
   - `id`: Primary key for the user.
   - `username`: Username of the user.
   - `email`: Email of the user.
-  - `isActive`: Active status of the user.
+
+
+## Post
+
+```mermaid
+erDiagram
+  comment {
+    integer id PK
+    varchar content
+    integer postId FK
+    integer parentId FK "nullable"
+    integer userId FK
+  }
+  user {
+    integer id PK
+    varchar username
+    varchar email
+  }
+  post {
+    integer id PK
+    varchar title
+    varchar content
+    integer categoryId FK
+    integer userId FK
+  }
+  comment }o--|| post: post
+  comment }o--|| comment: parent
+  comment }o--|| user: user
+  post }o--|| user: user
+```
+
+### `post`
+
+Post entity represents a post in the application.   
+@namespace Post
+
+**Properties**
+
+  - `id`: Primary key for the post.
+  - `title`: Title of the post.
+  - `content`: Content of the post.
+  - `categoryId`: Category ID of the post.
+  - `userId`: User ID who created the post.
 
 
 ## Default

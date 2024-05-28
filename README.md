@@ -37,14 +37,13 @@ npm install --save-dev typeorm-markdown-generator
 
 ### Configuration
 
-Create `src/generate-erd.ts` file:
+Create a `src/generate-erd.ts` file with the following content:
 
 ```ts
 // src/generate-erd.ts
 import { DataSource } from "typeorm";
 import { TypeormMarkdownGenerator } from "typeorm-markdown-generator";
 
-// Enter your TypeORM database configuration here.
 const appDataSource = new DataSource({
   type: "postgres",
   host: "localhost",
@@ -59,12 +58,10 @@ const appDataSource = new DataSource({
 const generateErd = async () => {
   try {
     const typeormMarkdown = new TypeormMarkdownGenerator(appDataSource, {
-      // Path to your entity files, starting from the project root.
       entityPath: "src/entities/*.ts",
-      // Title of the document.
       title: "Postgres TypeORM Markdown",
-      // Path to save the document, starting from the project root.
       outFilePath: "docs/postgres-erd.md",
+      indexTable: true,
     });
     await typeormMarkdown.build();
     console.log("Document generated successfully.");
@@ -76,7 +73,20 @@ const generateErd = async () => {
 generateErd();
 ```
 
-Note: The `TypeormMarkdownGenerator` internally sets the project root path to the location of the `package.json` file.
+**Explanation of the Configuration:**
+
+- **TypeORM DataSource Setting:**
+
+  - Use the same settings as in your application.
+
+- **TypeormMarkdownGenerator Options:**
+  - `entityPath`: Path to your entity files, starting from the project root.
+  - `title?:` Title of the generated document (default is "ERD").
+  - `outFilePath?:` Path to save the generated markdown document, starting from the project root (default is "docs/ERD.md").
+  - `indexTable?:` Whether to add the database indexes table to the markdown. (Only the indexes managed by the TypeORM entity are reflected, and the indexes created by the DB engine are not reflected, e.g., primary key index).
+
+> **Notes**
+> The `TypeormMarkdownGenerator` internally sets the project root path to the location of the `package.json` file.
 
 ### Compile
 

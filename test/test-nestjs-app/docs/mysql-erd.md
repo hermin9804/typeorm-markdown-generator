@@ -8,54 +8,10 @@
 
 
 
-- [Post](#post)
 - [ShoppingMall](#shoppingmall)
 - [User](#user)
+- [Post](#post)
 - [Default](#default)
-
-
-## Post
-
-```mermaid
-erDiagram
-  comment {
-    int id PK
-    varchar content
-    int postId FK
-    int parentId FK "nullable"
-    int userId FK
-  }
-  post {
-    int id PK
-    varchar title
-    varchar content
-    int categoryId FK
-    int userId FK
-  }
-  user {
-    int id PK
-    varchar username
-    varchar email
-    tinyint isActive
-  }
-  comment }o--|| post: post
-  comment }o--|| comment: parent
-  comment }o--|| user: user
-  post }o--|| user: user
-```
-
-### `post`
-
-Post entity represents a post in the application.   
-@namespace Post
-
-**Properties**
-
-  - `id`: Primary key for the post.
-  - `title`: Title of the post.
-  - `content`: Content of the post.
-  - `categoryId`: Category ID of the post.
-  - `userId`: User ID who created the post.
 
 
 ## ShoppingMall
@@ -83,7 +39,6 @@ erDiagram
     int id PK
     varchar username
     varchar email
-    tinyint isActive
   }
   order_item }|--|| order: order
   order_item }o--|| product: product
@@ -143,7 +98,6 @@ erDiagram
     int id PK
     varchar username
     varchar email
-    tinyint isActive
   }
   
 ```
@@ -172,7 +126,49 @@ User entity represents a user in the application.
   - `id`: Primary key for the user.
   - `username`: Username of the user.
   - `email`: Email of the user.
-  - `isActive`: Active status of the user.
+
+
+## Post
+
+```mermaid
+erDiagram
+  comment {
+    int id PK
+    varchar content
+    int postId FK
+    int parentId FK "nullable"
+    int userId FK
+  }
+  user {
+    int id PK
+    varchar username
+    varchar email
+  }
+  post {
+    int id PK
+    varchar title
+    varchar content
+    int categoryId FK
+    int userId FK
+  }
+  comment }o--|| post: post
+  comment }o--|| comment: parent
+  comment }o--|| user: user
+  post }o--|| user: user
+```
+
+### `post`
+
+Post entity represents a post in the application.   
+@namespace Post
+
+**Properties**
+
+  - `id`: Primary key for the post.
+  - `title`: Title of the post.
+  - `content`: Content of the post.
+  - `categoryId`: Category ID of the post.
+  - `userId`: User ID who created the post.
 
 
 ## Default
