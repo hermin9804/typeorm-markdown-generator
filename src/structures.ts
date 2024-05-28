@@ -5,6 +5,7 @@ export interface ITable {
   tableName: string;
   columns: IColumn[];
   relations: IRelation[];
+  indices: IIndex[];
 }
 
 export interface IColumn {
@@ -32,6 +33,15 @@ export interface IRelation {
   target: string;
   joinTableName: string;
   hasMinitemsTag: boolean;
+}
+
+export interface IIndex {
+  tableName: string;
+  indexName: string;
+  columns: string;
+  isUnique: boolean;
+  isSpatial: boolean;
+  where: string;
 }
 
 /**
@@ -69,4 +79,5 @@ export interface ITypeormMarkdownConfig {
   entityPath: string;
   title?: string; // default: ERD
   outFilePath?: string; // default: docs/ERD.md
+  indexTable?: boolean; // default: false
 }

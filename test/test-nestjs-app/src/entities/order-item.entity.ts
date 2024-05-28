@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -13,6 +14,7 @@ import { Product } from './product.entity';
  * @namespace ShoppingMall
  */
 @Entity()
+@Index(['orderId', 'productId'], { unique: true })
 export class OrderItem {
   /**
    * Primary key for the order item.

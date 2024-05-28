@@ -1,111 +1,8 @@
 import { DataSource, EntityMetadata, EntitySchema } from "typeorm";
 import { ConnectionMetadataBuilder } from "typeorm/connection/ConnectionMetadataBuilder";
 import { RelationMetadata } from "typeorm/metadata/RelationMetadata";
-import { IColumn, IRelation, ITable } from "../structures";
+import { IColumn, IIndex, IRelation, ITable } from "../structures";
 import { ColumnMetadata } from "typeorm/metadata/ColumnMetadata";
-
-export class EntityMetadataAnalyzer {
-  public static async analyze(dataSource: DataSource): Promise<ITable[]> {
-    await this.initialize(dataSource);
-    const connectionMetadataBuilder = new ConnectionMetadataBuilder(dataSource);
-    const { entities } = dataSource.options;
-    const TEntities = entities as (Function | EntitySchema<any> | string)[];
-    let entityMetadatas: EntityMetadata[];
-    if (entities) {
-      entityMetadatas = await connectionMetadataBuilder.buildEntityMetadatas(
-        TEntities
-      );
-      if (entityMetadatas.length === 0) {
-        throw Error(
-          "No entities found on connection, check your Typeorm datasource entities or entity path"
-        );
-      }
-    } else {
-      throw Error("No entities found on connection");
-    }
-    const tables = this.mapTables(dataSource, entityMetadatas);
-    await this.destroy(dataSource);
-    return tables;
-  }
-
-  private static async initialize(dataSource: DataSource) {
-    await dataSource.initialize();
-  }
-
-  private static async destroy(dataSource: DataSource) {
-    await dataSource.destroy();
-  }
-
-  private static mapTables(
-    dataSource: DataSource,
-    entityMetadatas: EntityMetadata[]
-  ): ITable[] {
-    return entityMetadatas.map((entity) => {
-      const columns: IColumn[] = entity.columns.map((column) => ({
-        type: this.normalizeType(column, dataSource),
-        columnName: column.databaseName,
-        isPrimary: column.isPrimary,
-        isForeignKey: !!column.referencedColumn,
-        isNullable: column.isNullable,
-      }));
-      const relations: IRelation[] = entity.relations.map((rel) =>
-        this.resolveRelation(entity, rel)
-      );
-      return {
-        tableName: entity.tableName,
-        columns,
-        relations,
-      };
-    });
-  }
-
-  private static normalizeType(
-    column: ColumnMetadata,
-    dataSource: DataSource
-  ): string {
-    const originalType = dataSource.driver.normalizeType(column);
-    return SHORTEST_COLUMN_TYPE[originalType] || originalType;
-  }
-
-  private static resolveRelation(
-    entity: EntityMetadata,
-    {
-      relationType,
-      inverseEntityMetadata,
-      propertyPath,
-      inverseSidePropertyPath,
-      isOwning,
-      joinTableName,
-      joinColumns,
-      inverseJoinColumns,
-      inverseRelation,
-    }: RelationMetadata
-  ): IRelation {
-    const column = entity.columns.find((c) => c.propertyName === propertyPath);
-    const nullable = column ? column.isNullable : false;
-
-    let target = inverseEntityMetadata.tableName;
-    let derivedRelationType = relationType;
-    let derivedJoinTable = joinTableName;
-    let derivedOwnership = isOwning;
-
-    if (joinColumns.length > 0 && inverseJoinColumns.length > 0) {
-      derivedRelationType = "many-to-many";
-    }
-
-    return {
-      relationType: derivedRelationType,
-      propertyPath,
-      isOwning: derivedOwnership,
-      nullable,
-      inverseSidePropertyPath,
-      source: entity.tableName,
-      joinTableName: derivedJoinTable,
-      target,
-      hasMinitemsTag: false,
-    };
-  }
-}
 
 const SHORTEST_COLUMN_TYPE: { [key: string]: string } = {
   "character varying": "varchar",
@@ -117,3 +14,133 @@ const SHORTEST_COLUMN_TYPE: { [key: string]: string } = {
   "time without time zone": "time",
   "time with time zone": "timetz",
 };
+
+export class EntityMetadataAnalyzer {
+  private dataSource: DataSource;
+  private wasDataSourceAlreadyInitialized: boolean;
+
+  constructor(dataSource: DataSource) {
+    this.dataSource = dataSource;
+    this.wasDataSourceAlreadyInitialized = dataSource.isInitialized;
+  }
+
+  public async analyze(): Promise<ITable[]> {
+    await this.initialize();
+    const entityMetadatas = await this.getEntityMetadatas();
+    const tables = entityMetadatas.map((entity) => this.mapTable(entity));
+    await this.cleanup();
+    return tables;
+  }
+
+  private async initialize() {
+    if (!this.wasDataSourceAlreadyInitialized) {
+      await this.dataSource.initialize();
+    }
+  }
+
+  private async cleanup() {
+    if (!this.wasDataSourceAlreadyInitialized) {
+      await this.dataSource.destroy();
+    }
+  }
+
+  private async getEntityMetadatas(): Promise<EntityMetadata[]> {
+    const connectionMetadataBuilder = new ConnectionMetadataBuilder(
+      this.dataSource
+    );
+    const { entities } = this.dataSource.options;
+    if (!entities || entities.length === 0) {
+      throw new Error(
+        "No entities found on connection, check your TypeORM datasource entities or entity path"
+      );
+    }
+
+    const TEntities = entities as (Function | EntitySchema<any> | string)[];
+    const entityMetadatas =
+      await connectionMetadataBuilder.buildEntityMetadatas(TEntities);
+
+    if (entityMetadatas.length === 0) {
+      throw new Error(
+        "No entities found on connection, check your TypeORM datasource entities or entity path"
+      );
+    }
+
+    return entityMetadatas;
+  }
+
+  private mapTable(entity: EntityMetadata): ITable {
+    return {
+      tableName: entity.tableName,
+      columns: this.mapColumns(entity),
+      relations: this.mapRelations(entity),
+      indices: this.mapIndexes(entity),
+    };
+  }
+
+  private mapColumns(entity: EntityMetadata): IColumn[] {
+    return entity.columns.map((column) => ({
+      type: this.normalizeType(column),
+      columnName: column.databaseName,
+      isPrimary: column.isPrimary,
+      isForeignKey: !!column.referencedColumn,
+      isNullable: column.isNullable,
+    }));
+  }
+
+  private normalizeType(column: ColumnMetadata): string {
+    const originalType = this.dataSource.driver.normalizeType(column);
+    return SHORTEST_COLUMN_TYPE[originalType] || originalType;
+  }
+
+  private mapRelations(entity: EntityMetadata): IRelation[] {
+    return entity.relations.map((relation) =>
+      this.resolveRelation(entity, relation)
+    );
+  }
+
+  private resolveRelation(
+    entity: EntityMetadata,
+    relation: RelationMetadata
+  ): IRelation {
+    const column = entity.columns.find(
+      (c) => c.propertyName === relation.propertyPath
+    );
+    const nullable = column ? column.isNullable : false;
+
+    let target = relation.inverseEntityMetadata.tableName;
+    let derivedRelationType = relation.relationType;
+    let derivedJoinTable = relation.joinTableName;
+    let derivedOwnership = relation.isOwning;
+
+    if (
+      relation.joinColumns.length > 0 &&
+      relation.inverseJoinColumns.length > 0
+    ) {
+      derivedRelationType = "many-to-many";
+    }
+
+    return {
+      relationType: derivedRelationType,
+      propertyPath: relation.propertyPath,
+      isOwning: derivedOwnership,
+      nullable,
+      inverseSidePropertyPath: relation.inverseSidePropertyPath,
+      source: entity.tableName,
+      joinTableName: derivedJoinTable,
+      target,
+      hasMinitemsTag: false,
+    };
+  }
+
+  private mapIndexes(entity: EntityMetadata): IIndex[] {
+    const ret = entity.indices.map((index) => ({
+      tableName: entity.tableName,
+      indexName: index.name,
+      columns: index.columns.map((col) => col.databaseName).join(", "),
+      isUnique: index.isUnique,
+      isSpatial: index.isSpatial,
+      where: index.where || "",
+    }));
+    return ret;
+  }
+}

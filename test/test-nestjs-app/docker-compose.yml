@@ -29,3 +29,5 @@ services:
 volumes:
   mysql-data:
   postgres-data:
+# docker exec -it [container_id_or_name] /bin/bash
+# psql -h localhost -p 5432 -U your_username -d your_database

@@ -7,28 +7,26 @@ import { findProjectRoot } from "./utils/findProjectRoot";
 import { EntitySpecContainer } from "./services/EntitySpecContainer";
 
 export class TypeormMarkdownGenerator {
-  private datasource: DataSource;
   private markdownConfig: ITypeormMarkdownConfig;
+  private entityMetadataAnalyzer: EntityMetadataAnalyzer;
 
   constructor(datasource: DataSource, markdownConfig: ITypeormMarkdownConfig) {
-    this.datasource = datasource;
     this.markdownConfig = markdownConfig;
+    this.entityMetadataAnalyzer = new EntityMetadataAnalyzer(datasource);
   }
 
   public async build(): Promise<void> {
     const entityPathFromRoot = `${await findProjectRoot()}/${
       this.markdownConfig.entityPath
     }`;
-    const tables = await EntityMetadataAnalyzer.analyze(this.datasource);
+
+    const tables = await this.entityMetadataAnalyzer.analyze();
     const entityDocs = await EntityDocAnalyzer.analyze(entityPathFromRoot);
 
     const entitySpecContainer = new EntitySpecContainer(tables, entityDocs);
     const namespaces = entitySpecContainer.createNamespcace();
 
-    MarkdownWriter.render(
-      this.markdownConfig.title,
-      this.markdownConfig.outFilePath,
-      namespaces
-    );
+    const markdownWriter = new MarkdownWriter(this.markdownConfig, namespaces);
+    markdownWriter.render();
   }
 }

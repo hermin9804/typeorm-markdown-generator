@@ -36,6 +36,7 @@ erDiagram
     integer id PK
     varchar username
     varchar email
+    boolean isActive
   }
   comment }o--|| post: post
   comment }o--|| comment: parent
@@ -82,11 +83,19 @@ erDiagram
     integer id PK
     varchar username
     varchar email
+    boolean isActive
   }
   order_item }|--|| order: order
   order_item }o--|| product: product
   order }o--|| user: user
 ```
+
+### Indexes
+
+| Table | Index Name | Columns | Unique | Spatial | Where |
+|-------|-------------|---------|--------|---------|-----------|
+| order_item | IDX_7e383dc486afc7800bf87d1c11 | orderId, productId | true | false |  |
+
 
 ### `product`
 
@@ -134,6 +143,7 @@ erDiagram
     integer id PK
     varchar username
     varchar email
+    boolean isActive
   }
   
 ```
@@ -162,6 +172,7 @@ User entity represents a user in the application.
   - `id`: Primary key for the user.
   - `username`: Username of the user.
   - `email`: Email of the user.
+  - `isActive`: Active status of the user.
 
 
 ## Default
